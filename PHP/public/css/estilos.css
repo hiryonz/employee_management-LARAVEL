@@ -1,0 +1,595 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+p {
+    margin: 0 !important;
+}
+
+.parent-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.parent-container .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 70px;
+}
+
+
+footer {
+    text-align: center;
+    background-color: #1c2331;
+    color: white;
+}
+
+.parent-container-home {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 130px 1fr 1fr;
+    grid-template-areas: "general_info general_info general_info general_info"
+                         "time  time task task"
+                         "time-graph time-graph task-graph task-graph";
+    gap:50px;
+    margin: 10%;
+    margin-top: 50px;
+    margin-bottom: 50px;   
+}
+
+.container-employee-time,
+.container-employee-time-graph,
+.container-employee-task,
+.container-employee-task-graph,
+.container-employee-data {
+    background-color: #f0f0f0; 
+    border: 1px solid #ccc;    
+    padding: 20px;             
+    border-radius: 5px;   
+    height: 500px;     
+    overflow: auto;
+    user-select: none;
+    min-width: 400px;
+
+}
+
+
+.parent-container-general-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-areas: "container1 container2 container3";
+    grid-area: general_info;
+    height: fit-content;
+}
+
+
+.container1 {
+    grid-area: container1;
+}
+
+.container2 {
+    grid-area: container2;
+}
+
+.container3 {
+    grid-area: container3;
+}
+
+.general-info {
+    background-color: #f0f0f0; 
+    border: 1px solid #ccc; 
+    border-radius: 5px;   
+    margin: 10px;
+    height: 150px;
+    min-width: 150px;
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:'logo'
+                         'info' ;
+    font-size: 1.2em;
+    text-align: center;
+
+}
+
+
+
+
+.container-logo {
+    display: flex;
+    grid-area: logo;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 2em;
+}
+
+.container-info {
+    display: flex;
+    flex-direction: column;
+    grid-area: info;
+    justify-content: center;
+    align-items: center;  
+    margin-bottom: 20px;
+}
+
+.container-employee-time:hover,
+.container-employee-time-graph:hover,
+.container-employee-task:hover,
+.container-employee-task-graph:hover,
+.general-info:hover {
+    background-color: rgba(245, 239, 239, 0.95)
+
+}
+
+
+
+
+
+
+
+.container-employee-time {
+    grid-area: time;
+}
+
+.container-employee-time-graph {
+    grid-area: time-graph;
+}
+
+.container-employee-task {
+    grid-area: task;
+}
+
+.container-employee-task-graph {
+    grid-area: task-graph;
+}
+
+.navbar-user {
+    background-color: #f0f0f0;
+    width: 45px;
+    height: 45px;
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+}
+
+
+.tables-row:hover {
+    background-color: rgb(181, 178, 178)
+}
+
+
+.readonly-container-planilla {
+    background-color: #c3c6cd65;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.container-employee-data {
+    display: flex   ;
+    align-items: center;
+    width: 95%;
+    height: fit-content;
+    padding: 10px;
+    margin-top: 40px;
+    padding-right: 0;
+    padding-bottom: 0;
+    overflow: auto;
+}
+
+
+.tables {
+    display: flex   ;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    background-color: #f0f0f0;
+}
+
+.tables::-webkit-scrollbar{
+    width: 9px;
+    height: 6px; 
+    background-color: #f0f0f0; 
+ }
+
+.tables::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background-color: #d7cfcf;
+}
+.tables::-webkit-scrollbar-thumb:active {
+    background-color: #cec9c9; 
+}
+
+.table  {
+    overflow-x: scroll;
+    font-size: 0.85 em;
+}
+
+
+
+.scrollContainer {
+    height: 100%;
+    margin-bottom: 35px;
+    padding: 5px;
+    overflow: auto;
+    padding-right: 0;
+    padding-bottom: 0;
+}
+
+.parent-container-viewEmployee {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+}
+
+/* 
+*
+*estilos de task manager
+*
+*/
+
+.parent-container-task {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    grid-template-areas: 'sidebar content2';
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar-container-task {
+    grid-area: sidebar;
+    background-color: #1c2331;
+}
+
+.content-container-task {
+    grid-area: content2;
+    background-color: aqua;
+}
+
+
+
+
+/*
+*
+* diseno de la pagina employeeData
+*
+*/
+
+.parent-container-viewEmployeeData {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr 1fr 0.5fr;
+    width: 100%;
+    height: 100%;
+    grid-template-areas: 
+                        'main-data graph-data'
+                        'main-data graph-data'
+                        'task-data task-data';
+}
+
+
+
+
+
+.parent-container-viewEmployeeData .row {
+    margin: 0;
+}
+
+.profile-picture-container {
+    margin-right: 5px;
+    height: fit-content;
+}
+
+.profile-picture-container .card {
+    margin-right: 5px;
+    border-radius: 5px;
+    width: 18rem;
+}
+
+.profile-picture-container .card-body  {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+hr {
+    height: 10px;
+    width: 100%;
+}
+
+.employee-profile-container {
+    display: flex;
+    margin: 10px;
+}
+
+.profile-planilla-container {
+    display: block;
+}
+
+.submain-data input,
+.submain-data select {
+    width: 13ch ;
+    min-width: 140px;
+    max-width: 300px;
+    height: fit-content;
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    pointer-events: all;
+    margin-left: 6px;
+    appearance: none; /* Para navegadores compatibles */
+    -webkit-appearance: none; /* Para Chrome y Safari */
+    -moz-appearance: none;
+}
+
+
+
+ .data-container,
+.data-container-sub {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.employee-profile-container input:focus,
+.employee-profile-container select:focus {
+    box-shadow: none;
+    border: none;
+}
+
+
+.finder-container-EmployeeData {
+    margin: 10px;
+    padding: 2px;
+}
+
+.main-data {
+    grid-area: main-data;
+
+}
+
+.graph-data {
+    grid-area: graph-data;
+    margin-top: 13%;
+}
+
+.graph-data .container-employee-task-graph,
+.graph-data .container-employee-time-graph {
+    height: 500px;
+    min-width: 500px;
+}
+
+.task-data {
+    grid-area: task-data;
+    background-color: aquamarine;
+}
+
+.task-container-data,
+.time-container-data,
+.main-data,
+.task-data    {
+    margin: 10px;
+    padding: 3px;
+
+}
+
+.title {
+    padding-top: 6px !important;
+    min-width: 100px !important;
+    width: fit-content  !important;
+}
+
+
+.direction-container {
+    display: flex;
+}
+
+.direction-container .direction-2 {
+    width: 350px;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+
+table td {
+    max-width: 200px;
+    overflow: hidden;
+    width: fit-content;
+}
+
+/*
+*
+* diseno del search bar
+*
+*/
+
+.search-box{
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+}
+.input-search{
+    height: 50px;
+    width: 50px;
+    border-style: none;
+    padding: 10px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    outline: none;
+    border-radius: 25px;
+    transition: all .5s ease-in-out;
+    background-color: #45bcc7;
+    padding-right: 40px;
+    color:#000000;
+}
+.input-search::placeholder{
+    color:rgba(18, 18, 18, 0.5);
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 100;
+}
+.btn-search{
+    width: 50px;
+    height: 50px;
+    border-style: none;
+    font-size: 20px;
+    font-weight: bold;
+    outline: none !important;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    color:#000000 ;
+    background-color:transparent;
+    pointer-events: painted;  
+}
+    .btn-search:focus-within ~ .input-search,
+    .input-search:not(:placeholder-shown) {
+    width: 650px;
+    border-radius: 0px;
+    background-color: transparent;
+    border-bottom: 3px solid rgba(144, 140, 140, 0.511);
+    transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+
+
+.input-search:focus {
+    width: 650px;
+    border-radius: 0px;
+    background-color: transparent;
+    border-bottom: 2px solid rgba(231, 229, 229, 0.607);
+    transition: all 500ms cubic-bezier(0, 0.110, 0.35, 2);
+}
+
+.input-search:focus + #results{
+    display: block;
+}
+
+.search-box:focus-within #results {
+    display: block;
+}
+
+
+
+#results {
+    position: absolute;
+    display: none;
+    width: calc(100% + 10px);
+    height: fit-content;
+    max-height: 300px;
+    border-radius: 5px;
+    padding: 12px;
+    background-color: #e1e7e8f7;
+    z-index: 1002;
+    cursor: pointer;
+}
+
+#results .listResult:hover {
+    background-color: #aec5cae2;
+    border-radius: 5px;
+}
+
+#results .listResult {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid  #aad0d7ac;
+    padding-left: 5px ;
+}
+
+#results p  {
+    display: flex;
+    width: 250px;
+    overflow: hidden;
+    white-space: nowrap; 
+    margin-right: 50px !important;
+}
+
+
+
+
+
+
+@media ( width < 992px ) {
+     .big-logo {
+        display: none;
+    }
+    
+    .parent-container-task {
+        grid-template-rows: 120px 1fr;
+        grid-template-areas: 'sidebar sidebar'
+                             'content2  content2';
+    }
+
+    .employee-profile-container {
+        display: block !important;
+    }
+
+    .profile-picture-container .card {
+        width: 100%;
+    }
+
+}
+
+
+
+
+
+@media ( width <= 1300px ) {
+    .direction-container,
+    .data-container-duo {
+        display: block !important;
+    }
+
+
+    .parent-container-home {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 170px 1fr 1fr 1fr;
+        grid-template-areas: "general_info general_info general_info general_info"
+                             "time  time time time"
+                             "task task  task task"
+                             "time-graph time-graph task-graph task-graph";    
+    }
+}
+
+@media ( width <= 1010px) {
+    .parent-container-home {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 0.5fr 0.5fr 1fr 1fr;
+        grid-template-areas: "general_info"
+                             "time"
+                             "task"
+                             "time-graph"
+                             "task-graph";     
+    }
+
+    .general-info {
+        height: 200px;
+    }
+
+}
+
+@media ( width >= 992px ) {
+    .small-logo {
+       display: none;
+   }
+}
+
