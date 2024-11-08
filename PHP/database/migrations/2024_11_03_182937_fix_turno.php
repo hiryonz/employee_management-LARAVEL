@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('entrada_salida', function(Blueprint $table) {
-            $table->dropColumn('id_turno');
-        });
 
         Schema::table('employee', function(Blueprint $table) {
             $table->string('id_turno')->constrained('turno')->onDelete('cascade');    
+        });
+
+        Schema::table('entrada_salida', function(Blueprint $table) {
+            $table->dropColumn('id_turno');
         });
     }
 
@@ -26,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('entrada_salida', function(Blueprint $table) {
-            $table->string('id_columna')->constrained('turno')->onDelete('cascade');
+            $table->string('id_turno')->constrained('turno')->onDelete('cascade');
         });
 
         Schema::table('employee', function(Blueprint $table) {

@@ -50,8 +50,6 @@ class ViewEmployeeDataController extends Controller
             'seguro_social',
             'seguro_educativo',
             'impuesto_renta',
-            'descuentos_faltas',
-            'horas_faltas'
         )->where('cedula', $id)->get()->toArray() ?? [];
 
 

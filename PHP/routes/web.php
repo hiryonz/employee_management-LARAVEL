@@ -32,12 +32,12 @@ Route::post('/login2', [authmanager2::class, 'loginPost'])->name('login.post');
 
 Route::middleware([ValidadeAuth::class])->group(function() {
     //Route::get('/', [LinkManager::class, 'home'])->name('home');
-    
+    Route::get('/addEmployee', [LinkManager::class, 'addEmployee'])->name('addEmployee');
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/', [HomeController::class, 'index'])->name('data.index');
 
     Route::get('/viewEmployeeData/{id}', [ViewEmployeeDataController::class, 'index'])->name('viewEmployeeData');
-    Route::get('/addEmployee', [LinkManager::class, 'addEmployee'])->name('addEmployee');
 
     Route::get('/viewEmployee', [ViewEmployeeController::class, 'index'])->name('viewEmployee');
     Route::get('/task', [LinkManager::class, 'task'])->name('task');
@@ -49,7 +49,7 @@ Route::middleware([ValidadeAuth::class])->group(function() {
 Route::get("/logout", [authmanager2::class, 'logout'])->name('logout');
 
 Route::get('/registration', [LinkManager::class, 'registration'])->name('registration');
-    Route::post('/registration', [addEmployeeController::class, 'create'])->name('registration.post');
+Route::post('/registration', [addEmployeeController::class, 'create'])->name('registration.post');
     
 
 

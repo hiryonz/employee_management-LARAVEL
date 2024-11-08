@@ -21,10 +21,8 @@ class Planilla extends Model
         'salario_neto',
         'seguro_social',
         'seguro_educativo',
-        'impuesto_renta', 
-        'descuentos', 
-        'descuentos_faltas', 
-        'horas_falta'
+        'impuesto_renta',
+        'descuentos'
     ];
 
 

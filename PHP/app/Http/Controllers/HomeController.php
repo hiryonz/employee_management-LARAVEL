@@ -22,6 +22,7 @@ class HomeController extends Controller
         *   permite utilizar los datos de forma mas secilla:  $data['name']
         *
         */
+        date_default_timezone_set('America/Panama');
         $fechaActual = date("Y/m/d");
 
         $employeeData = Employee::select('cedula', 'nombre', 'apellido')->get()->toArray() ?? [];
@@ -80,11 +81,11 @@ class HomeController extends Controller
         }
 
         $totalPersonal =   count($employee);
-        $countPersonal = EntradaSalida::whereNotNull('hora_entrada')->count()-1;
-
+        $countPersonal = EntradaSalida::whereNotNull('hora_entrada')->where('fecha', $fechaActual)->count();
 
         return view('home', compact('employee', 'task', 'totalPersonal', 'countPersonal')) ;
     }
+
 
 
     public function obtenerReportes(Request $request) {
