@@ -28,7 +28,7 @@ class addEmployeeController extends Controller
 
     public function  create(Request $request) {
         $request -> validate([
-            "cedula" => "required|string",
+            "cedula" => "required|string|unique:employee,cedula",
             "nombre" => "required|string",
             "apellido" => "required|string",
             "genero" => "required|string",
@@ -84,7 +84,7 @@ class addEmployeeController extends Controller
             $qrCodeBase64 = base64_encode($qrCodeImage);
 
 
-            
+
             Employee::create([
                 'cedula' => $request->cedula,
                 'nombre' => $request->nombre,

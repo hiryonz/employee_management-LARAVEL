@@ -89,7 +89,7 @@ p {
 
 .modal-dialog {
     margin: 1.75rem auto !important;
-    margin-left: 17% !important;
+    max-width: 800px !important;
 }
 
 
@@ -139,6 +139,10 @@ footer {
 
 }
 
+.container-employee-task-graph,
+.container-employee-time-graph {
+    overflow:hidden;
+}
 
 .parent-container-general-info {
     display: grid;

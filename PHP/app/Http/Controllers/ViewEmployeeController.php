@@ -35,6 +35,9 @@ class ViewEmployeeController extends Controller
         ->whereYear('fecha', $year)
         ->whereMonth('fecha', $month)
         ->get()->toArray();
+        
+
+        $horaEntrada = EntradaSalida::select('cedula', 'fecha', 'hora_entrada', 'hora_salida')->get()->toArray();
 
         $groupData = [];
 
@@ -77,8 +80,8 @@ class ViewEmployeeController extends Controller
                 $data['neto'] ?? ['salario_neto' => 'N/A'],
             );
         }
-        //dd($employee);
+        //dd($descuentoFalta);
 
-        return view("viewEmployee", compact("employee"));
+        return view("viewEmployee", compact("employee", ));
     }
 }

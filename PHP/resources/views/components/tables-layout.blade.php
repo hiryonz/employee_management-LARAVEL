@@ -1,4 +1,4 @@
-@props(['name', 'task', 'employee', 'employeeData', 'directionData'])
+@props(['name', 'task', 'employee', 'employeeData', 'directionData', 'descuentoFalta'])
 
 <?php
     // Determina qué conjunto de datos usar basado en el valor de $name
@@ -7,6 +7,7 @@
         'directionData' => $directionData,
         'employeeData' => $employeeData,
         'task' => $task,
+        'descuento' => $descuentoFalta,
         default => [],  // Devuelve un array vacío si no hay coincidencia
     };
 

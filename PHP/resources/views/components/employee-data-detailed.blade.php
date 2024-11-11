@@ -1,4 +1,4 @@
-@props(['employeeData', 'planillaData', 'direcionData', 'userData', 'QR'])
+@props(['name', 'employeeData', 'planillaData', 'direcionData', 'userData', 'QR'])
 @csrf
 <div class="submain-data">
     <div class="title-container">
@@ -15,11 +15,13 @@
                 </div>
                 <div class="card-body">
                     <!--se verifica por qr code porque solo aparece en la apgina principal  https://i.pinimg.com/236x/f5/7e/ea/f57eeaea750b772c083acbd7ad971aa8.jpg-->
-                    @if(isset($QR))
+                    @if(isset($name))
                         <button type="button" class="btn btn-light" data-toggle="modal" data-target="#updateProfileImageModal">
                             Actualizar Foto de perfil
                         </button>
+
                     @endif
+
                     <hr>
                     <h5>Contactos personales</h5>
                         <div class="data-container">

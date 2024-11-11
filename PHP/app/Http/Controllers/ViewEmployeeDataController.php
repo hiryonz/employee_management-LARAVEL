@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\DescuentoFalta;
 use App\Models\Direction;
 use App\Models\Employee;
 use App\Models\Login_user;
@@ -24,6 +25,9 @@ class ViewEmployeeDataController extends Controller
         
         $planillaData = Planilla::where('cedula', $id)->first();
 
+        $descuentoFalta = DescuentoFalta::select(
+            'cedula', 'fecha', 'horas_faltas', 'Descuentos_faltas', 'Horas_extras'
+        )->where('cedula', $id)->get()->toArray();
 
         $userData = Login_user::where('cedula', $id)->first();
 
@@ -35,7 +39,7 @@ class ViewEmployeeDataController extends Controller
         
 
         return view('viewEmployeeData',  
-        compact('smallEmployeeData', 'employeeData', 'direcionData',  'planillaData', 'userData', 'QR'));
+        compact('smallEmployeeData', 'employeeData', 'direcionData',  'planillaData', 'userData', 'QR', 'descuentoFalta'));
 
 
     }

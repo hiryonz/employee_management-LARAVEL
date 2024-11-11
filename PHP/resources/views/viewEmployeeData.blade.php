@@ -26,7 +26,7 @@
                     <button class="btn btn-danger ml-2 mr-4">Eliminar</button>
                 </form>
                 <button type="button" class="btn btn-light mr-4" data-toggle="modal" data-target="#Actualizar">Actualizar</button>
-                <button class="btn btn-light mr-4">Ver Historial</button>
+                <button class="btn btn-light mr-4" data-toggle="modal" data-target="#historial">Ver Historial</button>
             </div>
 
             <x-error-management/>
@@ -88,8 +88,32 @@
                 </div>
             </div>
 
+
+            <!-- Modal para el historial de descuentos -->
+            <div class="modal fade" id="historial" tabindex="-1" role="dialog" aria-labelledby="historialLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateProfileImageModalLabel">Actualizar Foto de Perfil</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="tables">
+                                    <x-tables-layout name="descuento" :descuentoFalta="$descuentoFalta"></x-tables-layout>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
         <div id="data_principal">
             <x-employee-data-detailed 
+                name="principal"
                 :employeeData="$employeeData"
                 :direcionData="$direcionData"
                 :planillaData="$planillaData"

@@ -41,7 +41,7 @@
     </div>
 
     <div class="container-employee-time-graph">
-        <h2>2</h2>
+        <x-graph1 :labels="$labels" :dataDescuento="$dataDescuento" />
     </div>
     
     <div class="container-employee-task scrollContainer" >

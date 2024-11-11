@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\DescuentoFalta;
 use App\Models\Direction;
 use App\Models\Employee;
 use App\Models\EntradaSalida;
 use App\Models\Planilla;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class HomeController extends Controller
 {
@@ -24,34 +27,30 @@ class HomeController extends Controller
         */
         date_default_timezone_set('America/Panama');
         $fechaActual = date("Y/m/d");
+        date_default_timezone_set('America/Panama');
+        $year = date("Y");
+        $month = date("m");
 
         $employeeData = Employee::select('cedula', 'nombre', 'apellido')->get()->toArray() ?? [];
         $entradaSalidaData = EntradaSalida::select('cedula', 'hora_entrada', 'hora_salida')
         ->where('fecha', $fechaActual)->get()->toArray() ?? [];
         $taskData = Task::select('id', 'cedula', 'descripcion', 'prioridad', 'fecha_creacion', 'fecha_limite')->get()->toArray() ?? []; 
 
+        $descuentoFaltas = DescuentoFalta::select('cedula', DB::raw('SUM(horas_faltas) as total_horas_faltas'))
+        ->whereYear('fecha', $year)
+        ->whereMonth('fecha', $month)
+        ->groupBy('cedula')
+        ->get();
+
+        $labels = $descuentoFaltas->pluck('cedula')->toArray();
+        $dataDescuento = $descuentoFaltas->pluck('total_horas_faltas')->toArray();
 
         // Agrupar datos por cédula
         $groupedData = [];
 
-        // Agrupa empleados
         foreach ($employeeData as $employee) {
             $groupedData[$employee['cedula']]['employee'] = $employee;
         }
-
-        /*
-        // Agrupa direcciones
-        foreach ($directionData as $direction) {
-            $groupedData[$direction['cedula']]['direction'] = $direction;
-        }
-
-        // Agrupa planillas
-        foreach ($planillaData as $planilla) {
-            $groupedData[$planilla['cedula']]['planilla'] = $planilla;
-        }
-        */
-
-        // Agrupa entrada y salida
         foreach ($entradaSalidaData as $entradaSalida) {
             $groupedData[$entradaSalida['cedula']]['entradaSalida'] = $entradaSalida;
         }
@@ -67,8 +66,6 @@ class HomeController extends Controller
         foreach ($groupedData as $cedula => $data) {
             $employee[] = array_merge(
                 $data['employee'] ?? ['cedula' => $cedula, 'nombre' => 'N/A', 'apellido' => 'N/A'],
-                //$data['direction'] ?? ['provincia' => 'N/A', 'corregimiento' => 'N/A', 'ciudad' => 'N/A'],
-                //$data['planilla'] ?? ['salario_neto' => 'N/A'],
                 $data['entradaSalida'] ?? ['hora_entrada' => 'N/A', 'hora_salida' => 'N/A']
             );
         }
@@ -83,7 +80,7 @@ class HomeController extends Controller
         $totalPersonal =   count($employee);
         $countPersonal = EntradaSalida::whereNotNull('hora_entrada')->where('fecha', $fechaActual)->count();
 
-        return view('home', compact('employee', 'task', 'totalPersonal', 'countPersonal')) ;
+        return view('home', compact('employee', 'task', 'totalPersonal', 'countPersonal', "labels", 'dataDescuento')) ;
     }
 
 
