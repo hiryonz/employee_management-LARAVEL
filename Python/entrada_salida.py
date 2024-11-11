@@ -22,7 +22,7 @@ def get_db_connection():
 
 
 # Función para insertar la entrada
-def insert_entrada(cedula):
+def insert_entrada(cedula, authcode):
     
     hora = time.strftime('%H:%M:%S') 
     fecha = datetime.now().strftime('%Y-%m-%d')
@@ -33,8 +33,13 @@ def insert_entrada(cedula):
     cursor = conn.cursor()
 
     # Verificar si ya existe una entrada para el empleado el día de hoy
-    query_check = "SELECT * FROM entrada_salida WHERE cedula = %s AND fecha = %s"
-    cursor.execute(query_check, (cedula, fecha))
+    query_check = """
+                SELECT * 
+                FROM entrada_salida e 
+                INNER JOIN qr_code qr ON e.cedula = qr.cedula 
+                WHERE e.cedula = %s AND e.fecha = %s AND qr.authcode = %s
+                """
+    cursor.execute(query_check, (cedula, fecha, authcode))
     existing_entry = cursor.fetchone()
     if existing_entry:
         # Si ya existe una entrada, comprobar si ya tiene salida

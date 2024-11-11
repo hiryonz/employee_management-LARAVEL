@@ -19,17 +19,17 @@ class AuthManager2 extends Controller
 
     function loginPost(request $request) {
         $request -> validate([
-            "user"=> "required|String",
-            "password" => "required|String"
+            "user"=> "required|string",
+            "password" => "required|string"
         ]);
 
         $credential = $request -> only('user', 'password');
 
         if(Auth::attempt(['user' => $credential['user'], 'password' => $credential['password']])) {
-            return redirect(route('home'));
+            return redirect()->route('home');
         }
 
-        return redirect(route('login2'))->with("error", "username or password incorrect");
+        return redirect()->route('login2')->with("error", "Username or password incorrect");
     }
 
     function registrationPost(Request $request){

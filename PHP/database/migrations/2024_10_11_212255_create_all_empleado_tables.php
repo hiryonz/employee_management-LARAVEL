@@ -104,8 +104,8 @@ return new class extends Migration
 
         Schema::create('turno', function(Blueprint $table) {
             $table->id();
-            $table->date('entrada')->unique();
-            $table->date('salida')->unique();
+            $table->dateTime('entrada')->unique();
+            $table->dateTime('salida')->unique();
             $table->timestamps();
         });
 

@@ -24,14 +24,17 @@ class ViewEmployeeController extends Controller
         */
 
         date_default_timezone_set('America/Panama');
-        $fechaActual = date("Y/m/d");
+        $year = date("Y");
+        $month = date("m");
 
 
         $employeeData = Employee::select('cedula', 'nombre', 'apellido', 'genero', 'departamento', 'tipo')->get()->toArray();
         $planillaData = Planilla::select('cedula', 'descuentos', 'salario_bruto', 'salario_neto')->get()->toArray();
         //$entradaSalidaData = EntradaSalida::select( 'cedula', 'hora_entrada', 'hora_salida')->get()->toArray();
         $descuentoFalta = DescuentoFalta::select('cedula', 'horas_faltas', 'descuentos_faltas')
-        ->where('fecha', $fechaActual)->get()->toArray();
+        ->whereYear('fecha', $year)
+        ->whereMonth('fecha', $month)
+        ->get()->toArray();
 
         $groupData = [];
 

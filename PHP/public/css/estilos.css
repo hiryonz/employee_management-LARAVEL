@@ -18,7 +18,79 @@ p {
     flex: 1;
     justify-content: center;
     align-items: center;
+    background-color: #f3f2f2;
 }
+
+.parent-container-viewEmployeeData .btn-light {
+    background-color: #ece5e5e1 ;
+
+}
+
+.disable-viewEmployeeData input,
+.disable-viewEmployeeData select,
+.disable-viewEmployeeData textarea {
+    pointer-events: all !important;
+}
+
+
+
+.parent-container-viewEmployeeData input,
+.parent-container-viewEmployeeData select,
+.parent-container-viewEmployeeData textarea,
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.modal-content .card-body {
+    pointer-events: none !important;
+    background-color: #f3f2f2e1 !important;
+}
+
+.parent-container-viewEmployeeData .card-body {
+    background-color: #f3f2f2e1 !important;
+
+}
+
+
+.modal-body {
+    background-color: #f3f2f2e1 !important;
+}
+
+.modal-body .data-container,
+.modal-body .data-container-sub,
+.modal-body input,
+.modal-body select,
+.modal-body textarea,
+.modal-body input,
+.modal-body select,
+.modal-body textarea  {
+    pointer-events: all !important;
+    margin-bottom: 5px;
+}
+
+.modal-body input,
+.modal-body select,
+.modal-body textarea {
+    background-color: #ffffff !important;
+
+}
+
+.custom-modal-width {
+    width: fit-content !important; 
+    padding-right: 20px !important;
+}
+
+.card-img-top {
+    padding: 2%;
+    border-radius: 50px !important;
+}
+
+.modal-dialog {
+    margin: 1.75rem auto !important;
+    margin-left: 17% !important;
+}
+
+
+
 
 .parent-container .container {
     display: flex;

@@ -7,17 +7,23 @@ use App\Models\Direction;
 use App\Models\Employee;
 use App\Models\Login_user;
 use App\Models\Planilla;
+use App\Models\QrCode_user;
 use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+use Illuminate\Support\Str;
 
 
 class addEmployeeController extends Controller
 {
     
     public function index(Request $request) {
-
+        return view("addEmployee");
     }
 
     public function  create(Request $request) {
@@ -54,9 +60,28 @@ class addEmployeeController extends Controller
         ]);
 
 
+        $authcode = Str::random(10);
+        $qrContent = json_encode(['cedula' => $request->cedula, 'authcode' => $authcode]);
+        
+        // Configura el renderizador de BaconQrCode con Imagick como backend
+        $renderer = new ImageRenderer(
+            new RendererStyle(200),
+            new ImagickImageBackEnd()
+        );
+        $writer = new Writer($renderer);
+        
+        // Genera el código QR como una imagen usando Imagick
+        $qrCodeImage = $writer->writeString($qrContent);
+        
+        // Codifica en base64 para almacenarlo en la base de datos
+        $qrCodeBase64 = base64_encode($qrCodeImage);
+
+
         DB::beginTransaction();
 
         try {
+            
+            
             Employee::create([
                 'cedula' => $request->cedula,
                 'nombre' => $request->nombre,
@@ -70,7 +95,7 @@ class addEmployeeController extends Controller
                 'departamento' => $request->departamento,
                 'id_turno' => $request->turno,
             ]);
-
+            
             Direction::create([
                 'cedula' => $request->cedula,
                 'ciudad' => $request->ciudad,
@@ -81,13 +106,13 @@ class addEmployeeController extends Controller
                 'numero_casa' => $request->numero_casa,
                 'descripcion' => $request->descripcion
             ]);
-
+            
             Login_user::create([
                 'cedula' => $request->cedula,
                 'user' => $request->user,
                 'password' => Hash::make($request->password)
             ]);
-
+            
             Planilla::create([
                 'cedula' => $request->cedula,
                 'hora_trabajada'  => $request->hora_trabajada,
@@ -100,15 +125,20 @@ class addEmployeeController extends Controller
                 'salario_bruto' => $request->salario_bruto,
                 'salario_neto' => $request->salario_neto
             ]);
-
+            QrCode_user::create([
+                'cedula' => $request->cedula,
+                'qr_code' => $qrCodeBase64,
+                'authcode' => $authcode
+            ]);
+            
             DB::commit();
-
+            
             // Attempt to log in the user
             if (Auth::attempt(['user' => $request->user, 'password' => $request->password])) {
                 return redirect(route('home'))->with("success", "User  successfully registered");
             }
-
-
+            
+            
         } catch (\Exception $ex) {
             DB::rollBack();
             return redirect(route("addEmployee"))->with("error",  "Error al registrar el empleado" . $ex->getMessage());

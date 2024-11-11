@@ -1,7 +1,7 @@
 import cv2
 import re
 import time
-
+import json
 from entrada_salida import  insert_entrada
 
 
@@ -27,15 +27,16 @@ while(capture.isOpened()):
 
     if bbox is not None and len(data) > 0:
         # Parse the data into a dictionary
-        parsed_data = parse_qr_data(data)
+        parsed_data = json.loads(data)
+        print(parsed_data)
         print(f'cedula: {parsed_data["cedula"]}')
         #print(f'authcode: {parsed_data["authCode"]}')
 
 
 
-        time.sleep(2)
+        time.sleep(1)
 
-        insert_entrada(parsed_data["cedula"])
+        insert_entrada(parsed_data["cedula"], parsed_data["authcode"])
 
     else:
         cv2.imshow('QR Code', frame)
