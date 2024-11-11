@@ -6,9 +6,20 @@
     <div class="employee-profile-container">
         <div class="profile-picture-container">
             <div class="card">
-                <img class="card-img-top" src="https://i.pinimg.com/236x/f5/7e/ea/f57eeaea750b772c083acbd7ad971aa8.jpg" alt="Card image cap">
+                <div class="img-container">
+                    @if ($employeeData->profile_image)
+                        <img class="card-img-top img" src="data:{{ $employeeData->image_mime }};base64,{{ $employeeData->profile_image }}" alt="Card image cap">
+                        @else
+                        <img src="{{ asset('img/default_profile_img.png') }}" alt="Imagen predeterminada" class="profile-image img">
+                    @endif
+                </div>
                 <div class="card-body">
-                    <button class="btn btn-light ">Actualizar Foto de perfil?</button>
+                    <!--se verifica por qr code porque solo aparece en la apgina principal  https://i.pinimg.com/236x/f5/7e/ea/f57eeaea750b772c083acbd7ad971aa8.jpg-->
+                    @if(isset($QR))
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#updateProfileImageModal">
+                            Actualizar Foto de perfil
+                        </button>
+                    @endif
                     <hr>
                     <h5>Contactos personales</h5>
                         <div class="data-container">
@@ -80,9 +91,7 @@
                         <option value="2" {{ $employeeData->turno == 2 ? 'selected' : '' }}>Turno 2</option>
                         <option value="3" {{ $employeeData->turno == 3 ? 'selected' : '' }}>Turno 3</option>                          
                     </select>                
-                </div>
-
-                <div class="data-container data-container-duo">         
+                </div>      
                     <div class="data-container-sub">
                         <label for="tipo" class="title">Rol del empleado:</label>
                         <select class="form-control" name="tipo" id="tipo" required>
@@ -106,7 +115,7 @@
                                 <option value="sistemas" {{ $employeeData->departamento === 'sistemas' ? 'selected' : '' }}>Sistemas</option>                              
                             </select>
                     </div>
-                </div>
+
             <hr>
             <h5>Direcciones</h5>
             <div class="direction-container">
@@ -141,12 +150,12 @@
                         <input type="text" class="form-control" name="numero_casa" id="numero_casa"
                             value="{{ $direcionData->numero_casa ?? '' }}" placeholder="N/A" required autocomplete="off">
                     </div>
-                </div>
-                <div class="direction-2">
-                    <div class="col form-group">
-                        <label for="descripcion">Descripción</label>
-                        <textarea class="form-control" name="descripcion" id="descripcion"
-                                autocomplete="off" rows="3">{{ $direcionData->descripcion ?? '' }}</textarea>
+                    <div class="direction-2">
+                        <div class="col form-group">
+                            <label for="descripcion">Descripción</label>
+                            <textarea class="form-control" name="descripcion" id="descripcion"
+                                    autocomplete="off" rows="3">{{ $direcionData->descripcion ?? '' }}</textarea>
+                        </div>
                     </div>
                 </div>
             </div>

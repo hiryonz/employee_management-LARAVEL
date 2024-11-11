@@ -16,16 +16,18 @@
         </div>
 
 
-        <div class="btn-container-employeeData d-flex">
-            <form class="d-flex" style="width: 100px" action="{{ route('destroyEmployee.post', ['id' => $employeeData->cedula]) }}"
-                onsubmit="return confirm('¿Seguro que deseas eliminar al empleado con cédula {{ $employeeData->cedula }}?')"
-                method="POST">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-danger ml-2 mr-4">Eliminar</button>
-            </form>
-            <button type="button" class="btn btn-light mr-4" data-toggle="modal" data-target="#Actualizar">Actualizar</button>
-            <button class="btn btn-light mr-4">Ver Historial</button>
+        <div class="btn-container-employeeData ">
+            <div class="d-flex">
+                <form style="width: 100px" action="{{ route('destroyEmployee.post', ['id' => $employeeData->cedula]) }}"
+                    onsubmit="return confirm('¿Seguro que deseas eliminar al empleado con cédula {{ $employeeData->cedula }}?')"
+                    method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger ml-2 mr-4">Eliminar</button>
+                </form>
+                <button type="button" class="btn btn-light mr-4" data-toggle="modal" data-target="#Actualizar">Actualizar</button>
+                <button class="btn btn-light mr-4">Ver Historial</button>
+            </div>
 
             <x-error-management/>
 
@@ -58,7 +60,33 @@
                     </div>
                 </div>
             </div>
-        </div>
+
+
+            <!-- Modal para actualizar la imagen -->
+            <div class="modal fade" id="updateProfileImageModal" tabindex="-1" role="dialog" aria-labelledby="updateProfileImageModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="{{ route('updateImg.post', $employeeData->cedula) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateProfileImageModalLabel">Actualizar Foto de Perfil</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="profile_image">Selecciona una imagen:</label>
+                                <input type="file" name="profile_image" id="profile_image" class="form-control" accept="image/*">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar Imagen</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
         <div id="data_principal">
             <x-employee-data-detailed 
@@ -68,6 +96,7 @@
                 :userData="$userData"
                 :QR="$QR"/>
         </div>
+    </div>
     </div>
 
     <div class="graph-data">
@@ -87,6 +116,7 @@
     <div class="task-data">
         <p>1</p>
     </div>
+
 </div>
 
 @include('include.javascript.tables')

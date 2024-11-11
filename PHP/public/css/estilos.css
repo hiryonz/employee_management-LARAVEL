@@ -1,9 +1,12 @@
 html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
+    overflow: scroll;
+
 }
 
 
@@ -34,9 +37,9 @@ p {
 
 
 
-.parent-container-viewEmployeeData input,
-.parent-container-viewEmployeeData select,
-.parent-container-viewEmployeeData textarea,
+.btn-container-employeeData  input,
+.btn-container-employeeData  select,
+.btn-container-employeeData  textarea,
 .modal-content input,
 .modal-content select,
 .modal-content textarea,
@@ -210,19 +213,23 @@ footer {
 
 
 .container-employee-time {
-    grid-area: time;
+    display: grid !important;
+    grid-area: time !important; 
 }
 
-.container-employee-time-graph {
-    grid-area: time-graph;
+.container-employee-time-graph { 
+    display: grid !important;
+    grid-area: time-graph !important;
 }
 
 .container-employee-task {
-    grid-area: task;
+    display: grid !important;
+    grid-area: task !important;
 }
 
 .container-employee-task-graph {
-    grid-area: task-graph;
+    display: grid !important;
+    grid-area: task-graph !important;
 }
 
 .navbar-user {
@@ -343,8 +350,8 @@ footer {
 
 .parent-container-viewEmployeeData {
     display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr 1fr 0.5fr;
+    grid-template-columns: 1fr 0.7fr;
+    grid-template-rows: auto auto 0.5fr;
     width: 100%;
     height: 100%;
     grid-template-areas: 
@@ -369,13 +376,22 @@ footer {
 .profile-picture-container .card {
     margin-right: 5px;
     border-radius: 5px;
-    width: 18rem;
+    width: 100%;
 }
 
 .profile-picture-container .card-body  {
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
+}
+
+.profile-picture-container {
+    margin-right: 12px;
+    width: 90%;
+
+}
+.profile-data-container {
+    width: 80%;
 }
 
 hr {
@@ -386,6 +402,7 @@ hr {
 .employee-profile-container {
     display: flex;
     margin: 10px;
+    width: 100%;
 }
 
 .profile-planilla-container {
@@ -431,25 +448,27 @@ hr {
 }
 
 .main-data {
-    grid-area: main-data;
+    grid-area: main-data !important;
 
 }
 
 .graph-data {
-    grid-area: graph-data;
+    grid-area: graph-data !important;
     margin-top: 13%;
 }
 
 .graph-data .container-employee-task-graph,
 .graph-data .container-employee-time-graph {
     height: 500px;
-    min-width: 500px;
+    min-width: 400px;
 }
 
 .task-data {
     grid-area: task-data;
     background-color: aquamarine;
 }
+
+
 
 .task-container-data,
 .time-container-data,
@@ -597,7 +616,34 @@ table td {
 }
 
 
+.submain-data {
+    min-width: 400px;
+}
 
+
+
+/*
+*
+*diseno de la iamgen
+*
+*/
+
+.img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    min-height: 300px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Hace que la imagen ocupe todo el espacio del contenedor */
+}
 
 
 
@@ -627,10 +673,7 @@ table td {
 
 
 @media ( width <= 1300px ) {
-    .direction-container,
-    .data-container-duo {
-        display: block !important;
-    }
+
 
 
     .parent-container-home {
@@ -641,7 +684,16 @@ table td {
                              "task task  task task"
                              "time-graph time-graph task-graph task-graph";    
     }
+
+    .parent-container-viewEmployeeData {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+                            'main-data '
+                            'graph-data'
+                            'task-data ';
+    }
 }
+
 
 @media ( width <= 1010px) {
     .parent-container-home {

@@ -38,6 +38,7 @@ Route::middleware([ValidadeAuth::class])->group(function() {
     Route::get('/viewEmployeeData/{id}', [ViewEmployeeDataController::class, 'index'])->name('viewEmployeeData');
     Route::post('/viewEmployeeData/{id}/update', [ViewEmployeeDataController::class, 'update'])->name('updateEmployee.post');
     Route::delete('/viewEmployeeData/{id}/destroy', [ViewEmployeeDataController::class, 'destroy'])->name('destroyEmployee.post');
+    Route::put('/viewEmployeeData/{id}/updateImg', [ViewEmployeeDataController::class, 'updateImg'])->name('updateImg.post');
     //se usa delete porque es un metodo http
     Route::post('/registration', [addEmployeeController::class, 'create'])->name('registration.post');
 

@@ -36,7 +36,9 @@ class Employee extends Authenticatable
         'email',
         'telefono',
         'departamento',
-        'id_turno'
+        'id_turno',
+        'profile_image',
+        'image_mime',
     ];
 
         public static function getTypes()

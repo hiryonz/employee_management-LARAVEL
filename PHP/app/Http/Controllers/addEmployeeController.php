@@ -60,27 +60,30 @@ class addEmployeeController extends Controller
         ]);
 
 
-        $authcode = Str::random(10);
-        $qrContent = json_encode(['cedula' => $request->cedula, 'authcode' => $authcode]);
-        
-        // Configura el renderizador de BaconQrCode con Imagick como backend
-        $renderer = new ImageRenderer(
-            new RendererStyle(200),
-            new ImagickImageBackEnd()
-        );
-        $writer = new Writer($renderer);
-        
-        // Genera el código QR como una imagen usando Imagick
-        $qrCodeImage = $writer->writeString($qrContent);
-        
-        // Codifica en base64 para almacenarlo en la base de datos
-        $qrCodeBase64 = base64_encode($qrCodeImage);
+
 
 
         DB::beginTransaction();
 
         try {
             
+            $authcode = Str::random(10);
+            $qrContent = json_encode(['cedula' => $request->cedula, 'authcode' => $authcode]);
+            
+            // Configura el renderizador de BaconQrCode con Imagick como backend
+            $renderer = new ImageRenderer(
+                new RendererStyle(200),
+                new ImagickImageBackEnd()
+            );
+            $writer = new Writer($renderer);
+            
+            // Genera el código QR como una imagen usando Imagick
+            $qrCodeImage = $writer->writeString($qrContent);
+            
+            // Codifica en base64 para almacenarlo en la base de datos
+            $qrCodeBase64 = base64_encode($qrCodeImage);
+
+
             
             Employee::create([
                 'cedula' => $request->cedula,

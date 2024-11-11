@@ -18,49 +18,14 @@ class ViewEmployeeDataController extends Controller
         
         $smallEmployeeData = Employee::select('cedula', 'nombre')->get()->toArray();
 
-        $employeeData = Employee::select(
-            'cedula', 
-            'nombre', 
-            'apellido', 
-            'genero', 
-            'edad', 
-            'nacimiento', 
-            'email',
-            'telefono',
-            'tipo', 
-            'departamento',
-            'id_turno')
-            ->where('cedula', $id)->first();
+        $employeeData = Employee::where('cedula', $id)->first();
 
-        $direcionData = Direction::select(
-            'cedula',
-            'provincia',
-            'corregimiento',
-            'distrito',
-            'ciudad',
-            'codigo_postal',
-            'numero_casa',
-            'descripcion')
-            ->where('cedula', $id)->first();
+        $direcionData = Direction::where('cedula', $id)->first();
         
-        $planillaData = Planilla::select(
-            'cedula',
-            'hora_trabajada',
-            'salario_h',
-            'descuentos',
-            'salario_bruto',
-            'salario_neto',
-            'seguro_social',
-            'seguro_educativo',
-            'impuesto_renta',
-        )->where('cedula', $id)->first();
+        $planillaData = Planilla::where('cedula', $id)->first();
 
 
-        $userData = Login_user::select(
-            'cedula',
-            'user'
-        )
-        ->where('cedula', $id)->first();
+        $userData = Login_user::where('cedula', $id)->first();
 
 
         $QR = QrCode_user::select('qr_code')
@@ -82,7 +47,7 @@ class ViewEmployeeDataController extends Controller
 
             return redirect(route("viewEmployee"))->with("success",  "Se logro eliminar correctament el empleado con cedula: " . $id);
         } catch (\Exception $e) {
-            return redirect(route("viewEmployeeData", ['id' => $id]))->with("error",  "Error al intentar eliminar el empelado con cedula " . $id .' ' . $e->getMessage());
+            return redirect()->back()->with("error",  "Error al intentar eliminar el empelado con cedula " . $id .' ' . $e->getMessage());
         }
     }
 
@@ -162,15 +127,61 @@ class ViewEmployeeDataController extends Controller
             ]);
     
             DB::commit();
-            return redirect(route("viewEmployeeData", ['id' => $request->cedula]))->with("success",  "Se actualizo correctamente el empleado" . $request->cedula);
+            return redirect()->back()->with("success",  "Se actualizo correctamente el empleado" . $request->cedula);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect(route("viewEmployeeData", ['id' => $request->cedula]))->with("error",  "Error al registrar el empleado" . $e->getMessage());
+            return redirect()->back()->with("error",  "Error al registrar el empleado" . $e->getMessage());
+        }
+    }
+
+    public function updateImg(Request $request, $id) {
+        $request->validate([
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $employee = Employee::where('cedula', $id)->firstOrFail();
+
+        // Manejo de la imagen
+        if ($request->hasFile('profile_image')) {
+            // Obtener el contenido del archivo de imagen
+            $image = $request->file('profile_image');
+            $imageContent = file_get_contents($image->getRealPath());
+            $imageBase64 = base64_encode($imageContent);
+
+            // Obtener el tipo MIME de la imagen
+            $mimeType = $image->getMimeType();
+
+            // Guardar el contenido base64 y el tipo MIME en la base de datos
+            $employee->profile_image = $imageBase64;
+            $employee->image_mime = $mimeType;
+
+        } else {
+            // Si no se sube imagen, asignar una imagen predeterminada basada en la primera letra del nombre
+            $firstLetter = strtoupper(substr($employee->nombre, 0, 1));
+            $defaultImagePath = public_path('default_images/' . $firstLetter . '.png');
+
+            // Verificar si la imagen existe, si no, asignar una imagen genérica
+            if (!file_exists($defaultImagePath)) {
+                $defaultImagePath = public_path('default_images/default.png');
+            }
+
+            // Obtener el contenido de la imagen predeterminada
+            $imageContent = file_get_contents($defaultImagePath);
+            $imageBase64 = base64_encode($imageContent);
+
+            // Obtener el tipo MIME de la imagen predeterminada
+            $mimeType = mime_content_type($defaultImagePath);
+
+            // Guardar en la base de datos
+            $employee->profile_image = $imageBase64;
+            $employee->image_mime = $mimeType;
         }
 
+        // Guardar los cambios
+        $employee->save();
 
-
+        return redirect()->back()->with('success', 'Imagen de perfil actualizada correctamente.');
     }
 
 }
