@@ -15,29 +15,6 @@
 
     @include('include.javascript.validation')
     @include('include.javascript.calcularPlanilla')
+    @include('include.javascript.formFunction')
 
-    <script>
-        document.addEventListener('DOMContentLoaded', ()=> {
-            initializePlanillaCalculators(document.querySelector('.formulario-container-employee'))
-        })
-
-        function limpiarFormulario(event) {
-            const form = event.target.closest('form')
-            form.reset();
-            window.scrollTo({top:0, behavior: 'smooth'})
-        } 
-
-
-        function activarPasword(event) {
-            const form = event.target.closest('form')
-            const password = form.querySelector('#password')
-
-            console.log(password)
-            if(password.type == 'password') {
-                password.type = 'text'
-            }else {
-                password.type = 'password'
-            }
-        }
-    </script>
 @endsection

@@ -84,62 +84,16 @@ class addEmployeeController extends Controller
             $qrCodeBase64 = base64_encode($qrCodeImage);
 
 
-
-            Employee::create([
-                'cedula' => $request->cedula,
-                'nombre' => $request->nombre,
-                'apellido' => $request->apellido,
-                'genero' => $request->genero,
-                'edad' => $request->edad,
-                'nacimiento' => $request->nacimiento,
-                'email'  => $request->correo,
-                'telefono' => $request->telefono,
-                'tipo' => $request->tipo,
-                'departamento' => $request->departamento,
-                'id_turno' => $request->turno,
-            ]);
-            
-            Direction::create([
-                'cedula' => $request->cedula,
-                'ciudad' => $request->ciudad,
-                'codigo_postal' => $request->codigo_postal,
-                'provincia' => $request->provincia,
-                'corregimiento' => $request->corregimiento,
-                'distrito' => $request->distrito,
-                'numero_casa' => $request->numero_casa,
-                'descripcion' => $request->descripcion
-            ]);
-            
-            Login_user::create([
-                'cedula' => $request->cedula,
-                'user' => $request->user,
-                'password' => Hash::make($request->password)
-            ]);
-            
-            Planilla::create([
-                'cedula' => $request->cedula,
-                'hora_trabajada'  => $request->hora_trabajada,
-                'salario_h' => $request->sal_hora,
-                'descuentos' => $request->descuento,
-                'seguro_social' => $request->seguro_social,
-                'seguro_educativo' => $request->seguro_educativo,
-                'impuesto_renta' => $request->ir,
-                'deducciones' => $request->deducciones,
-                'salario_bruto' => $request->salario_bruto,
-                'salario_neto' => $request->salario_neto
-            ]);
-            QrCode_user::create([
-                'cedula' => $request->cedula,
-                'qr_code' => $qrCodeBase64,
-                'authcode' => $authcode
-            ]);
+            Employee::insertEmployee($request);
+            Direction::insertDirection($request);
+            Login_user::insertLogin($request);
+            Planilla::insertPlanilla($request);
+            QrCode_user::insertQr($request, $qrCodeBase64, $authcode);
             
             DB::commit();
             
-            // Attempt to log in the user
-            if (Auth::attempt(['user' => $request->user, 'password' => $request->password])) {
-                return redirect(route('home'))->with("success", "User  successfully registered");
-            }
+            return redirect(route('home'))->with("success", "User  successfully registered");
+            
             
             
         } catch (\Exception $ex) {

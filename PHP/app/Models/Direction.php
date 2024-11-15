@@ -22,6 +22,20 @@ class Direction extends Model
         'descripcion',
     ];
 
+
+    public static function insertDirection($request) {
+        return Direction::create([
+            'cedula' => $request->cedula,
+            'ciudad' => $request->ciudad,
+            'codigo_postal' => $request->codigo_postal,
+            'provincia' => $request->provincia,
+            'corregimiento' => $request->corregimiento,
+            'distrito' => $request->distrito,
+            'numero_casa' => $request->numero_casa,
+            'descripcion' => $request->descripcion
+        ]);
+    }
+
     public function employee() 
     {
         return $this->belongsTo(Employee::class, 'cedula');

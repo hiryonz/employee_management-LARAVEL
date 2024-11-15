@@ -1,4 +1,4 @@
-@props(['name', 'task', 'employee', 'employeeData', 'directionData', 'descuentoFalta'])
+@props(['name', 'task', 'employee', 'employeeData', 'directionData', 'descuentoFalta', 'path'])
 
 <?php
     // Determina qué conjunto de datos usar basado en el valor de $name
@@ -12,8 +12,7 @@
     };
 
 ?>
-
-<table class="table">
+<table class="table" >
     <thead>
         <tr>
             @if (is_array($combinedData) && count($combinedData) > 0) 
@@ -29,7 +28,9 @@
         @if (is_array($combinedData) && count($combinedData) > 0)
             @foreach ($combinedData as $row)
             
-                <tr class="tables-row" onclick="findEmployee({{$row['cedula']}})">
+                <tr class="tables-row" @if (!isset($path)) onclick="findEmployee({{$row['cedula'] ?? ''}})" 
+                @endif 
+                >
                     @foreach ($row as $data)
                         <td>
                             @if ($data == '00:00:00')

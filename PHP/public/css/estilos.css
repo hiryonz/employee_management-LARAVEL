@@ -1,12 +1,11 @@
 html, body {
     height: 100%;
     width: 100%;
+    min-width: 500px;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
-
 }
 
 
@@ -15,6 +14,56 @@ html, body {
 p {
     margin: 0 !important;
 }
+
+
+
+/* Estilos para el modal tipo dropdown */
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 150px;
+}
+
+.user-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-dropdown ul li {
+    border-bottom: 1px solid #eee;
+}
+
+.user-dropdown ul li:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown ul li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
+
+.user-dropdown ul li a:hover {
+    background-color: #f4f4f4;
+    color: #000;
+}
+
+/* Mostrar el dropdown */
+.user-dropdown.show {
+    display: block;
+}
+
+
 
 .parent-container {
     display: flex;
@@ -123,6 +172,43 @@ footer {
     margin-bottom: 50px;   
 }
 
+.parent-container-home-employee {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 130px 1fr;
+    grid-template-areas: "general_info general_info general_info general_info"
+                         "time-graph time-graph task task";
+    gap:50px;
+    margin: 10%;
+    margin-top: 50px;
+    margin-bottom: 50px;   
+}
+
+.parent-container-home-employee .container-employee-time-graph {
+    min-width: 400px;
+    max-width: 500px;
+    height: fit-content;
+}
+
+
+.parent-container .container-employee-time-graph {
+    min-width: 400px;
+    max-width: none;
+    height: fit-content;
+}
+
+/* Estilo para el botón deshabilitado */
+.btnEmployee:disabled {
+    background-color: #cccaca !important; 
+    cursor: not-allowed; 
+    border-color: #cccccc !important; 
+}
+
+.btnEmployee{
+    width: 80px;
+}
+
+
 .container-employee-time,
 .container-employee-time-graph,
 .container-employee-task,
@@ -146,8 +232,8 @@ footer {
 
 .parent-container-general-info {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
-    grid-template-areas: "container1 container2 container3";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "container1 container2 container3 container4";
     grid-area: general_info;
     height: fit-content;
 }
@@ -226,6 +312,9 @@ footer {
     grid-area: time-graph !important;
 }
 
+
+
+
 .container-employee-task {
     display: grid !important;
     grid-area: task !important;
@@ -272,31 +361,47 @@ footer {
 
 
 .tables {
-    display: flex   ;
+    display: flex;
     align-items: center;
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow: hidden;
     background-color: #f0f0f0;
+    max-height: 470px;
+}
+table {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    table-layout: auto;
+    table-layout: fixed;
+    font-size: 1rem;
+    max-height: 470px !important;
+} 
+
+
+table td {
+    overflow: hidden; 
+    width: 33%;
 }
 
-.tables::-webkit-scrollbar{
+
+.tables::-webkit-scrollbar,
+table::-webkit-scrollbar{
     width: 9px;
     height: 6px; 
     background-color: #f0f0f0; 
  }
 
-.tables::-webkit-scrollbar-thumb{
+.tables::-webkit-scrollbar-thumb,
+table::-webkit-scrollbar-thumb{
     border-radius: 10px;
     background-color: #d7cfcf;
 }
-.tables::-webkit-scrollbar-thumb:active {
+.tables::-webkit-scrollbar-thumb:active,
+table::-webkit-scrollbar-thumb:active {
     background-color: #cec9c9; 
-}
-
-.table  {
-    overflow-x: scroll;
-    font-size: 0.85 em;
 }
 
 
@@ -356,7 +461,7 @@ footer {
     display: grid;
     grid-template-columns: 1fr 0.7fr;
     grid-template-rows: auto auto 0.5fr;
-    width: 100%;
+    width: 98%;
     height: 100%;
     grid-template-areas: 
                         'main-data graph-data'
@@ -456,16 +561,6 @@ hr {
 
 }
 
-.graph-data {
-    grid-area: graph-data !important;
-    margin-top: 13%;
-}
-
-.graph-data .container-employee-task-graph,
-.graph-data .container-employee-time-graph {
-    height: 500px;
-    min-width: 400px;
-}
 
 .task-data {
     grid-area: task-data;
@@ -498,18 +593,53 @@ hr {
     width: 350px;
 }
 
-table {
+
+
+/*
+*
+* diseno de la grafica
+*
+*/
+
+.graph-data {
+    display: flex;
+    flex-direction: column;
+    grid-area: graph-data !important;
+    margin-top: 15%;
+    width: 100%;
+}
+
+.task-container-data,
+.time-container-data {
+    width: 98%;
+}
+
+.graph-data .container-employee-task-graph,
+.graph-data .container-employee-time-graph {
+    height: fit-content;  
+    width: 100%;
+}
+
+.graph2-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    overflow: scroll;
+}
+
+.graph1-container {
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+}
+
+#myChart {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 
-table td {
-    max-width: 200px;
-    overflow: hidden;
-    width: fit-content;
-}
 
 /*
 *
@@ -646,9 +776,104 @@ table td {
 .img {
     width: 100%;
     height: 100%;
+    max-width: 400px;
     object-fit: cover; /* Hace que la imagen ocupe todo el espacio del contenedor */
 }
 
+
+
+
+/*
+*
+*
+*diseno de la tabla en news
+*
+*/
+
+.news-parent-container {
+    padding: 20px;
+    width: 100%;
+    min-width: 300px;
+}
+
+
+.news-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.news-main {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+
+}
+
+.news-title-container {
+    display: flex;
+    background-color: #45bcc7;
+}
+.news-heart-container {
+    background-color: #08ff1d;
+}
+
+.news-content-container {
+    width: 100%;
+    background-color: #bf5454;
+}
+
+.news-title {
+    flex: 3;
+}
+.news-heart-container {
+    flex: 1;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    padding-right: 4%;
+}
+
+.btn-heart {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin: 5px;
+    background-color: #cccccc66 !important;
+    border-style: none !important;
+}
+.btn-heart:hover:not(:disabled) {
+    background-color: #ccccccb4 !important;
+}
+
+.btn-heart.disabled {
+    background-color: #9b9a9a !important;
+}
+
+
+
+/*
+*
+*
+*change password :D
+*
+*/
+.change-password-container {
+    width: 70%;
+}
+
+.change-password {
+    min-width: 100%;
+}
+
+.change-password-btn-container,
+.change-password-title-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+}
 
 
 @media ( width < 992px ) {
@@ -689,12 +914,24 @@ table td {
                              "time-graph time-graph task-graph task-graph";    
     }
 
+    .parent-container-home-employee {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 170px 1fr 1fr;
+        grid-template-areas: "general_info general_info general_info"
+                             "time-graph  time-graph time-graph"
+                             "task task task";
+ 
+    }
     .parent-container-viewEmployeeData {
         grid-template-columns: 1fr;
         grid-template-areas: 
                             'main-data '
                             'graph-data'
                             'task-data ';
+    }
+
+    .graph-data {
+        margin-top: 6%;
     }
 }
 

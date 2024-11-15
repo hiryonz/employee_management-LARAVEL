@@ -1,4 +1,4 @@
-@props(['name', 'employeeData', 'planillaData', 'direcionData', 'userData', 'QR'])
+@props(['name', 'employeeData', 'planillaData', 'direcionData', 'userData', 'QR', 'faltas'])
 @csrf
 <div class="submain-data">
     <div class="title-container">
@@ -7,8 +7,8 @@
         <div class="profile-picture-container">
             <div class="card">
                 <div class="img-container">
-                    @if ($employeeData->profile_image)
-                        <img class="card-img-top img" src="data:{{ $employeeData->image_mime }};base64,{{ $employeeData->profile_image }}" alt="Card image cap">
+                    @if ($employeeData->profile_image ?? '' && File::exists(public_path($employeeData->profile_image ?? '')))
+                        <img class="card-img-top img" src="{{ asset($employeeData->profile_image) }}" alt="Card image cap" class="profile-image img">
                         @else
                         <img src="{{ asset('img/default_profile_img.png') }}" alt="Imagen predeterminada" class="profile-image img">
                     @endif
@@ -41,6 +41,10 @@
                             <input type="text" class="form-control" name="user" id="user"
                             value="{{ $userData->user ?? '' }}" placeholder="N/A" autocomplete="off"> 
                         </div>
+                        <button type="button" class="btn btn-light mb-3" onclick="window.location.href='{{ route('get.password') }}'">
+                            Cambiar contraseña?
+                        </button>
+
                         <div class="data-container">
                             @if (isset($QR))
                                 <img src="data:image/png;base64,{{ $QR->qr_code }}" alt="Código QR">
@@ -186,18 +190,30 @@
                 </div>
 
                 <div class="readonly-container-planilla">
+                <div class="row mb-3 mr-6">
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
+                            <label for="horas_faltas" class="form-label">Horas Faltadas:</label>
+                            <input type="text" class="form-control horas_faltas" id="horas_faltas" name="horas_faltas"
+                                value="{{ $faltas->horas ?? 0 }}" placeholder="N/A" readonly>
+                        </div>
+                        <div class="col-sm-4 col-md-6 col-lg-4 mb-2">
+                            <label for="total_descuento" class="form-label">Total de descuento:</label>
+                            <input type="text" class="form-control total_descuento" id="total_descuento" name="total_descuento"
+                                value="{{ $faltas->descuento ?? 0 }}" placeholder="N/A" readonly>
+                        </div>
+                    </div>
                     <div class="row mb-3">
-                        <div class="col-md-5 col-lg-4 mb-2">
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
                             <label for="seguro_social" class="form-label">Seguro Social:</label>
                             <input type="text" class="form-control seguro_social" id="seguro_social" name="seguro_social"
                                 value="{{ $planillaData->seguro_social ?? 0 }}" placeholder="N/A" readonly>
                         </div>
-                        <div class="col-md-5 col-lg-4 mb-2">
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
                             <label for="seguro_educativo" class="form-label">Seguro Educativo:</label>
                             <input type="text" class="form-control seguro_educativo" id="seguro_educativo" name="seguro_educativo"
                                 value="{{ $planillaData->seguro_educativo ?? 0 }}" placeholder="N/A" readonly>
                         </div>
-                        <div class="col-md-5 col-lg-4 mb-2">
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
                             <label for="ir" class="form-label">Impuesto/Renta:</label>
                             <input type="text" class="form-control ir" id="ir" name="ir" 
                                 value="{{ $planillaData->impuesto_renta ?? 0 }}" placeholder="N/A" readonly>
@@ -205,20 +221,21 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-5 col-lg-4 mb-2">
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
                             <label for="deducciones" class="form-label">Deducciones:</label>
                             <input type="text" class="form-control deducciones" id="deducciones" name="deducciones" 
                                 value="{{ $planillaData->deducciones ?? 0 }}" placeholder="N/A" readonly>
                         </div>
-                        <div class="col-md-5 col-lg-4 mb-2">
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
                             <label for="salario_bruto" class="form-label">Salario Bruto:</label>
                             <input type="text" class="form-control salario_bruto" id="salario_bruto" name="salario_bruto"
                                 value="{{ $planillaData->salario_bruto ?? 0 }}" placeholder="N/A" readonly>
                         </div>
-                        <div class="col-md-5 col-lg-4 mb-2">
+                        <?php $salario_final = ($planillaData->salario_neto ?? 0) - ($faltas->descuento ?? 0) ?>
+                        <div class="col-sm-4 col-md-5 col-lg-4 mb-2">
                             <label for="salario_neto" class="form-label">Salario Neto:</label>
                             <input type="text" class="form-control salario_neto" id="salario_neto" name="salario_neto" 
-                                value="{{ $planillaData->salario_neto ?? 0 }}" placeholder="N/A" readonly>
+                                value="{{ $salario_final }}" placeholder="N/A" readonly>
                         </div>
                 </div>    
             </div>

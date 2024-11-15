@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
+
 
 class Login_user extends Authenticatable
 {
@@ -25,10 +27,21 @@ class Login_user extends Authenticatable
         'remember_token',
     ];
 
-    public function employee() {
-        return $this->belongsTo(Employee::class, 'cedula');
+
+
+    public static function insertLogin($request) {
+        return Login_user::create([
+            'cedula' => $request->cedula,
+            'user' => $request->user,
+            'password' => Hash::make($request->password)
+        ]);
     }
 
+
+
+    public function employee() {
+        return $this->belongsTo(Employee::class, 'cedula', 'cedula');
+    }
 
 
 

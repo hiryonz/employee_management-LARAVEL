@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\VerifyAdmin;
 use App\Models\DescuentoFalta;
 use App\Models\Direction;
 use App\Models\Employee;
@@ -11,12 +12,19 @@ use App\Models\Planilla;
 use App\Models\QrCode_user;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Psy\CodeCleaner\LabelContextPass;
+use App\Helper\Helpers;
 
 class ViewEmployeeDataController extends Controller
 {
 
     public function index($id) {
         
+        $year = date("Y");
+        $month = date("m");
+
         $smallEmployeeData = Employee::select('cedula', 'nombre')->get()->toArray();
 
         $employeeData = Employee::where('cedula', $id)->first();
@@ -25,21 +33,24 @@ class ViewEmployeeDataController extends Controller
         
         $planillaData = Planilla::where('cedula', $id)->first();
 
-        $descuentoFalta = DescuentoFalta::select(
-            'cedula', 'fecha', 'horas_faltas', 'Descuentos_faltas', 'Horas_extras'
+        $descuentoFalta = DescuentoFalta::select('fecha', 'horas_faltas', 'Descuentos_faltas', 'Horas_extras'
         )->where('cedula', $id)->get()->toArray();
+
+        $faltas = DescuentoFalta::select(DB::raw('SUM(horas_faltas) as horas, SUM(Descuentos_faltas) as descuento'))->first();
 
         $userData = Login_user::where('cedula', $id)->first();
 
-
+        //dd($userData);
         $QR = QrCode_user::select('qr_code')
         ->where('cedula', $id)
         ->first();
-          
         
+        $mesFalta = DescuentoFalta::getDescuentoFaltaMensual($id, $year);
+        $semanaFalta = DescuentoFalta::getDescuentoFaltaSemanal($id);
 
-        return view('viewEmployeeData',  
-        compact('smallEmployeeData', 'employeeData', 'direcionData',  'planillaData', 'userData', 'QR', 'descuentoFalta'));
+        $data = compact('smallEmployeeData', 'employeeData', 'direcionData',  'planillaData', 'userData', 'QR', 'descuentoFalta', 'faltas', 'mesFalta', 'semanaFalta');
+
+        return view('viewEmployeeData',  $data);
 
 
     }
@@ -54,6 +65,7 @@ class ViewEmployeeDataController extends Controller
             return redirect()->back()->with("error",  "Error al intentar eliminar el empelado con cedula " . $id .' ' . $e->getMessage());
         }
     }
+    
 
         
 
@@ -139,53 +151,44 @@ class ViewEmployeeDataController extends Controller
         }
     }
 
-    public function updateImg(Request $request, $id) {
-        $request->validate([
-            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
 
-        $employee = Employee::where('cedula', $id)->firstOrFail();
+public function updateImg(Request $request, $id) {
 
-        // Manejo de la imagen
-        if ($request->hasFile('profile_image')) {
-            // Obtener el contenido del archivo de imagen
-            $image = $request->file('profile_image');
-            $imageContent = file_get_contents($image->getRealPath());
-            $imageBase64 = base64_encode($imageContent);
 
-            // Obtener el tipo MIME de la imagen
-            $mimeType = $image->getMimeType();
-
-            // Guardar el contenido base64 y el tipo MIME en la base de datos
-            $employee->profile_image = $imageBase64;
-            $employee->image_mime = $mimeType;
-
+    // Obtener el empleado a partir de su cedula (ID)
+    $employee = Employee::where('cedula', $id)->firstOrFail();
+    if ($request->hasFile('profile_image')) {
+        if (File::exists($employee->profile_image)) {
+            File::delete($employee->profile_image); // Elimina el archivo
+            // También puedes usar unlink($filePath) si no quieres usar File
+            echo "Archivo eliminado correctamente.";
         } else {
-            // Si no se sube imagen, asignar una imagen predeterminada basada en la primera letra del nombre
-            $firstLetter = strtoupper(substr($employee->nombre, 0, 1));
-            $defaultImagePath = public_path('default_images/' . $firstLetter . '.png');
-
-            // Verificar si la imagen existe, si no, asignar una imagen genérica
-            if (!file_exists($defaultImagePath)) {
-                $defaultImagePath = public_path('default_images/default.png');
-            }
-
-            // Obtener el contenido de la imagen predeterminada
-            $imageContent = file_get_contents($defaultImagePath);
-            $imageBase64 = base64_encode($imageContent);
-
-            // Obtener el tipo MIME de la imagen predeterminada
-            $mimeType = mime_content_type($defaultImagePath);
-
-            // Guardar en la base de datos
-            $employee->profile_image = $imageBase64;
-            $employee->image_mime = $mimeType;
+            echo "El archivo no existe.";
         }
+        $image = $request->file('profile_image');
+        $mimeType = $image->getMimeType();
 
-        // Guardar los cambios
-        $employee->save();
+        // Crear un nombre único para la imagen
+        $imageName = $employee->cedula . '.' . time();
+        $path = 'img/userProfile/';
+        $subir = $request->file('profile_image')->move($path, $imageName);
 
-        return redirect()->back()->with('success', 'Imagen de perfil actualizada correctamente.');
+        // Actualizar el registro en la base de datos con la nueva ruta de la imagen
+       
+       $newImg = $path . $imageName;
+       
+        $employee->profile_image = $newImg;
+        $employee->image_mime = $mimeType;
+        //dd($employee->profile_image);
     }
+
+    // Guardar los cambios en la base de datos
+    $employee->save();
+
+    return redirect()->back()->with('success', 'Imagen de perfil actualizada correctamente.');
+}
+
+
+
 
 }

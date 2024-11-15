@@ -50,6 +50,25 @@ class Employee extends Authenticatable
         }
 
 
+        public static function insertEmployee($request) {
+            return Employee::create([
+                'cedula' => $request->cedula,
+                'nombre' => $request->nombre,
+                'apellido' => $request->apellido,
+                'genero' => $request->genero,
+                'edad' => $request->edad,
+                'nacimiento' => $request->nacimiento,
+                'email'  => $request->correo,
+                'telefono' => $request->telefono,
+                'tipo' => $request->tipo,
+                'departamento' => $request->departamento,
+                'id_turno' => $request->turno,
+            ]);
+            
+        }
+
+
+
         // Relación con Direccion
         public function direcciones()
         {

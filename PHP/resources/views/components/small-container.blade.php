@@ -1,4 +1,4 @@
-@props(['name', 'logo', 'countPersonal', 'totalPersonal', 'reportes', 'anuncios', 'class'])
+@props(['name', 'info', 'logo', 'first', 'second', 'third', 'fourth', 'class', 'path'])
 
 
 <div class="general-info  {{$class}}">
@@ -7,17 +7,17 @@
     </div>
     <div class="container-info">
         <div class="small-value">
-            @switch($name)
-                @case('Empleados Presentes')
-                    <p>{{$countPersonal}}/{{$totalPersonal}}</p>
+            @switch($info)
+                @case('1')
+                    <p>{{ $first }}{{ isset($second) ? "/$second" : '' }}</p>
+                @break
+
+                @case('2')
+                    <p>{{$third}}</p>
                     @break
 
-                @case('Reportes')
-                    <p>{{$reportes}}</p>
-                    @break
-
-                @case('Anuncios')
-                    <p>{{$anuncios}}</p>
+                @case('3')
+                    <p>{{$fourth}}</p>
                     @break
 
                 @default
@@ -30,3 +30,13 @@
         </div>
     </div>
 </div>
+
+@if (isset($path))
+<script>
+    let {{$class}} = document.querySelector('.{{$class}}')
+    {{$class}}.addEventListener('click', () => {
+        window.location.href = "{{url($path ?? '')}}"
+    })
+
+</script>
+@endif

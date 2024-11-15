@@ -26,11 +26,17 @@ class AuthManager2 extends Controller
         $credential = $request -> only('user', 'password');
 
         if(Auth::attempt(['user' => $credential['user'], 'password' => $credential['password']])) {
-            return redirect()->route('home');
+            if(auth()->user()->employee->tipo == 'admin') {
+                return redirect()->route('home');
+            }else {
+                return redirect()->route('homeEmployee');
+            }
         }
 
         return redirect()->route('login2')->with("error", "Username or password incorrect");
     }
+
+    
 
     function registrationPost(Request $request){
   

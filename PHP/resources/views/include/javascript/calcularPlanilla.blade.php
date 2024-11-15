@@ -11,8 +11,8 @@ function initializePlanillaCalculators(form) {
                 ir = form.querySelector(".ir"),
                 descuento = form.querySelector(".descuento"),
                 deducciones = form.querySelector(".deducciones"),
-                salarioNeto = form.querySelector(".salario_neto");
-                
+                salarioNeto = form.querySelector(".salario_neto"),
+                descuentoTotal = form.querySelector(".total_descuento");
 
             hora_trabajada.addEventListener('input', calcularPlanilla);
             salarioHora.addEventListener("input", calcularPlanilla);
@@ -22,6 +22,7 @@ function initializePlanillaCalculators(form) {
            
 
             function calcularPlanilla() {
+                let horaDescuento = Math.round((parseFloat(descuentoTotal.value) || 0) * 100) / 100;
                 let horaTrabajadaValor = parseInt(hora_trabajada.value || 205);
                 let salarioHoraValor = Math.round((parseFloat(salarioHora.value) || 0) * 100) / 100;
                 let descuento1Valor = Math.round((parseFloat(descuento.value) || 0) * 100) / 100;
@@ -51,7 +52,7 @@ function initializePlanillaCalculators(form) {
                     parseFloat(descuento1Valor) 
                 ).toFixed(2);
 
-                salarioNeto.value = ((salarioBruto.value || 0) - (deducciones.value || 0)).toFixed(2);
+                salarioNeto.value = ((salarioBruto.value || 0) - (deducciones.value || 0) - horaDescuento).toFixed(2);
             }   
 
         }

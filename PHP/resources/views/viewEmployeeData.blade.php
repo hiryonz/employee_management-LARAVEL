@@ -11,12 +11,18 @@
 
 <div class="parent-container-viewEmployeeData">
     <div class="main-data">
+
+    @if (auth()->check() && auth()->user()->employee->tipo === "admin")
         <div class="finder-container-EmployeeData">
             <x-search-bar :employeeData="$smallEmployeeData"></x-search-bar>
         </div>
+    @endif   
+        
 
 
         <div class="btn-container-employeeData ">
+        @if (auth()->check() && auth()->user()->employee->tipo === "admin")
+
             <div class="d-flex">
                 <form style="width: 100px" action="{{ route('destroyEmployee.post', ['id' => $employeeData->cedula]) }}"
                     onsubmit="return confirm('¿Seguro que deseas eliminar al empleado con cédula {{ $employeeData->cedula }}?')"
@@ -29,88 +35,13 @@
                 <button class="btn btn-light mr-4" data-toggle="modal" data-target="#historial">Ver Historial</button>
             </div>
 
-            <x-error-management/>
-
-            <!-- Modal de Actualización -->
-            <div class="modal fade" id="Actualizar" tabindex="-1" role="dialog" aria-labelledby="ActualizarLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content custom-modal-width">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="ActualizarLabel">Actualizar Datos</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <?php $route = route('updateEmployee.post', ['id' => $employeeData->cedula]); ?>
-
-                        <form class="submain-data" action="{{ $route }}" method="post">
-                            <div class="modal-body">
-                                <x-employee-data-detailed 
-                                    :route="$route"
-                                    :employeeData="$employeeData"
-                                    :direcionData="$direcionData"
-                                    :planillaData="$planillaData"
-                                    :userData="$userData"/>
-                            </div>
-                            <div class="modal-footer d-flex justify-content-center">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Modal para actualizar la imagen -->
-            <div class="modal fade" id="updateProfileImageModal" tabindex="-1" role="dialog" aria-labelledby="updateProfileImageModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <form action="{{ route('updateImg.post', $employeeData->cedula) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateProfileImageModalLabel">Actualizar Foto de Perfil</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <label for="profile_image">Selecciona una imagen:</label>
-                                <input type="file" name="profile_image" id="profile_image" class="form-control" accept="image/*">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Actualizar Imagen</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Modal para el historial de descuentos -->
-            <div class="modal fade" id="historial" tabindex="-1" role="dialog" aria-labelledby="historialLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateProfileImageModalLabel">Actualizar Foto de Perfil</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="tables">
-                                    <x-tables-layout name="descuento" :descuentoFalta="$descuentoFalta"></x-tables-layout>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
-                            </div>
-                    </div>
-                </div>
-            </div>
-
+            
+            @include('include.modals.modal-actualizacion')
+            @include('include.modals.modal-historialDescuento')
+            
+            @endif
+        <x-error-management/>
+        @include('include.modals.modal-actualizarImg')
         <div id="data_principal">
             <x-employee-data-detailed 
                 name="principal"
@@ -118,6 +49,7 @@
                 :direcionData="$direcionData"
                 :planillaData="$planillaData"
                 :userData="$userData"
+                :faltas="$faltas"
                 :QR="$QR"/>
         </div>
     </div>
@@ -126,7 +58,7 @@
     <div class="graph-data">
         <div class="time-container-data">
             <div class="container-employee-time-graph">
-                <h2>2</h2>
+                <x-graph2 id="detailed_data" :mesFalta="$mesFalta" :semanaFalta="$semanaFalta"></x-graph2>
             </div>
         </div>
 
@@ -149,6 +81,7 @@
     const inputs = document.querySelectorAll('.form-control');
 
     function asignSelect(form) {
+        console.log(form)
         const departamento = form.querySelector('#departamento');
         const cargo = form.querySelector('#tipo');
         const descripcion = form.querySelector('#descripcion');
@@ -170,7 +103,7 @@
         const inputs2 = document.querySelectorAll('.modal-body .submain-data input');
 
         const form = document.getElementById('data_principal');
-        const formModal = document.querySelector('.modal-body');
+        const formModal = document.querySelector('#Actualizar .modal-body');
 
         inputs.forEach(input => {
             increaseInputLenght({ target: input });
@@ -180,13 +113,59 @@
             increaseInputLenght({ target: input });
         });
 
-        asignSelect(form);
-        asignSelect(formModal);
+        if(form) asignSelect(form);
+        if(formModal) asignSelect(formModal);
         initializePlanillaCalculators(document.querySelector('.parent-container-viewEmployeeData'));
     });
 
     inputs.forEach(input => {
         input.addEventListener('input', increaseInputLenght);
     });
+
+
+
+    const dataDescuento = @json($descuentoFalta);
+    function filterByDate(date) {
+        let startDate = '1000-01-01';
+        let endDate = '9999-12-31';
+
+        if (!date || date === '') {
+            startDate = document.getElementById('startDate').value || startDate;
+            endDate = document.getElementById('endDate').value || endDate;
+        }
+
+        // Filtrar los datos
+        const filteredData = dataDescuento.filter(item => {
+            return item.fecha >= startDate && item.fecha <= endDate;
+        });
+
+        console.log('Datos filtrados:', filteredData);
+
+        // Actualizar la tabla con los datos filtrados
+        updateTable(filteredData);
+    }
+
+// Función para actualizar la tabla
+function updateTable(filteredData) {
+    const tableBody = document.querySelector('#table-container tbody');
+    tableBody.innerHTML = ''; // Limpiar la tabla existente
+
+    if (filteredData.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="100%">No hay datos que mostrar.</td></tr>';
+        return;
+    }
+
+    filteredData.forEach(row => {
+        const tr = document.createElement('tr');
+
+        Object.values(row).forEach(value => {
+            const td = document.createElement('td');
+            td.textContent = value === '00:00:00' ? 'N/A' : value;
+            tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
+    });
+}
 </script>
 @endsection
