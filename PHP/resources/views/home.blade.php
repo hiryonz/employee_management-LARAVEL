@@ -2,7 +2,6 @@
 @section('title', 'home')
 @section('content')
 
-
 <?php
     $reportes = "ohola";
     $anuncios = "hola";
@@ -32,14 +31,14 @@
             name="tareas por revisar"
             info="2"
             logo='<i class="fa-solid fa-magnifying-glass"></i>'
-            :third="$totalHorasFaltas"
+            :third="$reviewTask"
         />
         <x-small-container 
             class="container4"   
             name="tareas pendientes"
             info="2"
             logo='<i class="fa-solid fa-list-check"></i>'
-            :third="$totalHorasFaltas"
+            :third="$taskCount"
         />
 
     </div>
@@ -52,7 +51,7 @@
     </div>
 
     <div class="container-employee-time-graph">
-        <x-graph1 id="home" :labels="$labels" :dataDescuento="$dataDescuento" />
+        <x-graph1 id="time" :labels="$labels" :data="$dataDescuento" />
     </div>
     
     <div class="container-employee-task scrollContainer" >
@@ -60,9 +59,11 @@
             <x-tables-layout name="task" :task="$task"></x-tables-layout>
         </div>
     </div>
+    <?php
 
+?>
     <div class="container-employee-task-graph">
-        <h2>4</h2>
+        <x-graph1 id="task" :labels="$labelsTask" :data="$allTask" />
     </div>
 </div>
 

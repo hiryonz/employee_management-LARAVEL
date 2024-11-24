@@ -6,8 +6,8 @@
                             @csrf
                             <div class="modal-header">
                                 <h5 class="modal-title" id="updateProfileImageModalLabel">Actualizar Foto de Perfil</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -15,7 +15,7 @@
                                 <input type="file" name="profile_image" id="profile_image" class="form-control" accept="image/*">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Actualizar Imagen</button>
                             </div>
                         </form>

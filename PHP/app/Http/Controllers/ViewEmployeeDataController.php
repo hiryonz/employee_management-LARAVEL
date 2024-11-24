@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\Login_user;
 use App\Models\Planilla;
 use App\Models\QrCode_user;
+use App\Models\Task;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -47,8 +48,21 @@ class ViewEmployeeDataController extends Controller
         
         $mesFalta = DescuentoFalta::getDescuentoFaltaMensual($id, $year);
         $semanaFalta = DescuentoFalta::getDescuentoFaltaSemanal($id);
+        $labelsTask = ['asignado', 'trabajando'];
 
-        $data = compact('smallEmployeeData', 'employeeData', 'direcionData',  'planillaData', 'userData', 'QR', 'descuentoFalta', 'faltas', 'mesFalta', 'semanaFalta');
+        $task = Task::select('estado')
+        ->whereIn('estado', $labelsTask)
+        ->where('cedula', $id)->get()->toArray() ?? [];
+
+        $labelsTask2 = ['nuevo', 'asignado', 'trabajando', 'revisar'];
+
+        $task2 = Task::select('estado')
+        ->whereIn('estado', $labelsTask2)
+        ->where('cedula', $id)->get()->toArray() ?? [];
+        
+        $data = compact('smallEmployeeData', 'employeeData', 'direcionData',  
+        'planillaData', 'userData', 'QR', 'descuentoFalta', 'faltas', 'mesFalta', 'semanaFalta',
+        'labelsTask', 'task', 'labelsTask2', 'task2');
 
         return view('viewEmployeeData',  $data);
 

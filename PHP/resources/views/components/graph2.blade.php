@@ -3,11 +3,11 @@
 <div class="graph2-container">
     <div class="d-flex justify-content-center mb-5">
         <p style="padding-top: 5px"><Strong><?php echo date('Y-m-d'); ?></Strong></p>
-        <button class="btn btn-light ml-3 btnEmployee" id="month" disabled>Meses</button>
-        <button class="btn btn-light ml-1 btnEmployee" id="day">Semana</button>
+        <button class="btn btn-light ms-3 btnEmployee" id="month" disabled>Meses</button>
+        <button class="btn btn-light ms-1 btnEmployee" id="day">Semana</button>
 
     </div>
-    <canvas id="myChart"></canvas>
+    <canvas class="myChart" id="myChart"></canvas>
 </div>
 
 <script>

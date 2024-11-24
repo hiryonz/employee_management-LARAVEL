@@ -50,7 +50,8 @@ class HomeController extends Controller
         $employeeData = Employee::select('cedula', 'nombre', 'apellido')->get()->toArray() ?? [];
         $entradaSalidaData = EntradaSalida::select('cedula', 'hora_entrada', 'hora_salida')
         ->where('fecha', $fechaActual)->get()->toArray() ?? [];
-        $taskData = Task::select('id', 'cedula', 'descripcion', 'prioridad', 'fecha_creacion', 'fecha_limite')->get()->toArray() ?? []; 
+        $task = Task::select('id', 'cedula', 'departamento', 'prioridad', 'estado', 'fecha_limite')->get()->toArray() ?? []; 
+       
 
         $descuentoFaltas = DescuentoFalta::select('cedula', DB::raw('SUM(horas_faltas) as total_falta'))
         ->whereYear('fecha', $year)
@@ -81,7 +82,7 @@ class HomeController extends Controller
         /*
         *
         *   MUY IMPORTANTE EL array_merge()
-        *   permite juntar muchos arrays y subarrays
+        *   permite juntar muchos arrays y subarraysen uno solo
         *
         */
         $employee = [];
@@ -92,17 +93,31 @@ class HomeController extends Controller
             );
         }
 
-        $task = [];
-        for ($i = 0; $i < count($taskData); $i++) {
-            $task[$i] = array_merge(
-                $taskData[$i] ?? ['N/A']
-            );
-        }
 
         $totalPersonal =   count($employee);
         $countPersonal = EntradaSalida::whereNotNull('hora_entrada')->where('fecha', $fechaActual)->count();
 
-        return view('home', compact('employee', 'task', 'totalPersonal', 'countPersonal', "labels", 'dataDescuento', 'totalHorasFaltas')) ;
+        $labelsTask = ['nuevo', 'asignado', 'trabajando', 'revisar'];
+
+        $taskCount = Task::select('estado')
+        ->whereIn('estado', $labelsTask)->count();
+
+        $allTask = Task::select('estado')
+        ->whereIn('estado', $labelsTask)
+        ->get()->toArray() ?? [];
+
+
+        //dd($allTask, $taskCount);
+
+        $reviewTask = Task::select('estado')
+        ->where('cedula', auth()->user()->employee->cedula)
+        ->where('estado', 'revisar')->count(); 
+        //labels
+
+
+        return view('home', compact('employee', 'task', 'totalPersonal', 
+        'countPersonal', "labels", 'dataDescuento', 'totalHorasFaltas',
+        'reviewTask', 'taskCount', 'allTask', 'labelsTask')) ;
     }
 
     public function getEmployeeData($id) {
@@ -118,12 +133,35 @@ class HomeController extends Controller
         $mesFalta = DescuentoFalta::getDescuentoFaltaMensual($id, $year);
         $semanaFalta = DescuentoFalta::getDescuentoFaltaSemanal($id);
 
+        //$task = Task::select('id', 'cedula', 'departamento', 'prioridad', 'estado', 'fecha_limite')
+        //->where('departamento', auth()->user()->employee->departamento)->get()->toArray() ?? []; 
+        $labelsTask = ['nuevo', 'asignado', 'trabajando', 'revisar'];
         
 
+        $workingTask = Task::select('estado')
+        ->where('departamento', auth()->user()->employee->departamento)
+        ->whereIn('estado', $labelsTask)->count();
 
+        $asignTask = Task::select('estado')
+        ->where('cedula', $id)
+        ->where('estado', 'asignado')->count();
+        
+        
+        $task = Task::select('id', 'cedula', 'departamento', 'prioridad', 'estado', 'fecha_limite')
+        ->whereHas('incharge', function ($query) use ($id) {
+            $query->where('cedula', $id);
+        });
+        $asignTask = $task->count();
+        $task = $task->get()->toArray() ?? [];
+
+        $dataTask = Task::with([
+            'employee:cedula,nombre,departamento', // Relación con Employee
+            'incharge:id,id_incharge,cedula', // Relación con InchargeTask
+        ])->get()->toArray();
         //dd($report, $news);
         
-        return view('homeEmployee', compact('mesFalta', 'semanaFalta', 'descuentoFaltas'));
+        return view('homeEmployee', compact('mesFalta', 'semanaFalta', 'descuentoFaltas',
+        'asignTask', 'task', 'workingTask'));
 
     }
 

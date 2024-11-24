@@ -22,7 +22,10 @@ function initializePlanillaCalculators(form) {
            
 
             function calcularPlanilla() {
-                let horaDescuento = Math.round((parseFloat(descuentoTotal.value) || 0) * 100) / 100;
+                let horaDescuento = 0;
+                if(descuentoTotal) {
+                    let horaDescuento = Math.round((parseFloat(descuentoTotal.value) || 0) * 100) / 100;
+                }
                 let horaTrabajadaValor = parseInt(hora_trabajada.value || 205);
                 let salarioHoraValor = Math.round((parseFloat(salarioHora.value) || 0) * 100) / 100;
                 let descuento1Valor = Math.round((parseFloat(descuento.value) || 0) * 100) / 100;

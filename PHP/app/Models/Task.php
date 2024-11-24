@@ -20,12 +20,31 @@ class Task extends Model
 
     protected $fillable = [
         'cedula', 
-        'decripcion', 
+        'descripcion', 
+        'titulo',
         'prioridad', 
+        'departamento',
+        'estado',
         'fecha_creacion', 
         'fecha_limite', 
+        'estado_db'
     ];
 
+    public static function insertTask($request) {
+        //dd($request->titulo,$request->descripcion);
+        return Task::create([
+            'cedula' => $request->cedula,
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+            'prioridad' => $request->prioridad,
+            'departamento' => $request->departamento,
+            'fecha_creacion' => $request->fecha_creacion,
+            'fecha_limite' => $request->fecha_limite,
+            'estado_db' => 'activo',
+            'estado' => 'nuevo',
+        ]);
+        
+    }
 
 
     public function getTypes()
@@ -41,4 +60,10 @@ class Task extends Model
     {
         return $this->belongsTo(Employee::class, 'cedula');
     }
+
+    public function incharge()
+    {
+        return $this->hasMany(InchargeTask::class, 'id_incharge', 'id');
+    }
+    
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ViewEmployeeController;
 use App\Http\Controllers\ViewEmployeeDataController;
 use App\Http\Middleware\VerifyAdmin;
@@ -51,6 +52,13 @@ Route::middleware([ValidadeAuth::class])->group(function() {
         Route::post('/registration', [addEmployeeController::class, 'create'])->name('registration.post');
         Route::get('/home', [HomeController::class, 'index'])->name('home');
         Route::get('/', [HomeController::class, 'index'])->name('data.index');
+
+        Route::post('/task/add', [TaskController::class, 'create'])->name('addTask');
+        Route::post('/task/update', [TaskController::class, 'update'])->name('updateTask');
+        Route::post('/task/updateState', [TaskController::class, 'updateState'])->name('updateTaskState');
+        Route::post('/tasks/destroy', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+
     });
 
     
@@ -58,7 +66,7 @@ Route::middleware([ValidadeAuth::class])->group(function() {
 
 
 
-    Route::get('/task', [LinkManager::class, 'task'])->name('task');
+    Route::get('/task', [TaskController::class, 'index'])->name('task');
     Route::get('/calendar', [LinkManager::class, 'calendar'])->name('calendar');
 
 });

@@ -16,8 +16,16 @@ class InchargeTask extends Model
     protected $fillable = [
         'id_incharge',
         'cedula',
-        'id',
     ];
+
+
+    public static function insertInchargeTask($cedula, $id_task)
+    {
+        return InchargeTask::create([
+            'cedula' => $cedula,
+            'id_incharge' => $id_task
+        ]);
+    }
 
     public function employee() 
     {
@@ -26,8 +34,9 @@ class InchargeTask extends Model
 
     public function task()
     {
-        return $this->belongsTo(Task::class,'id');
+        return $this->belongsTo(Task::class, 'id_incharge', 'id');
     }
+    
 
 
 

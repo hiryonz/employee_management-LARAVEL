@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        #card {
+            border: 1px solid;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+        }        
+
+        #drop-zone {
+            background-color:aquamarine;
+            width: 400px;
+            height: 400px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="content-container-task">
+        <div class="content-task">
+            <div class="card" id="card">
+                <h3>item</h3>
+            </div>
+
+
+            <div id="drop-zone"></div>
+        </div>
+    </div>
+
+<script>
+    const cards =document.getElementById('card');
+    const dropZone = document.getElementById('drop-zone');
+
+
+
+    card.addEventListener('mousedown', mouseDown);
+    
+
+
+    function mouseDown(e) {
+        draggedCard = e.target;
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        document.addEventListener('mousemove', mouseMove);
+        document.addEventListener('mouseup', mouseUp);
+    }
+
+    function mouseMove(e) {
+        if (!draggedCard) return;
+
+        newX = startX - e.clientX;
+        newY = startY - e.clientY;
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // Mover la tarjeta siguiendo el cursor
+        draggedCard.style.top = `${draggedCard.offsetTop -  newY}px`;
+        draggedCard.style.left = `${draggedCard.offsetLeft -  newX}px`;
+    }
+
+    function mouseUp(e) {
+        document.removeEventListener('mousemove', mouseMove)
+    }
+
+
+</script>
+</body>
+</html>

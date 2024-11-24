@@ -31,12 +31,12 @@
             </select>
         </div>
         <div class="col">
-            <label for="edad">Ingrese edad</label>
+            <label for="edad" class="form-label">Ingrese edad</label>
             <input type="number" class="form-control" name="edad" value="{{ old('edad') }}"
                 id="edad" placeholder="edad" required autocomplete="off">
         </div>
         <div class="col">
-            <label for="nacimiento">Ingrese nacimiento</label>
+            <label for="nacimiento" class="form-label">Ingrese nacimiento</label>
             <input type="date" class="form-control" name="nacimiento" value="{{ old('nacimiento') }}"
                 id="nacimiento" required  autocomplete="off">
         </div>
@@ -55,7 +55,7 @@
     </div>
     <div class="row md-6">
         <div class="col-md-4">
-            <label for="tipo">Seleccione el tipo</label>
+            <label for="tipo" class="form-label">Seleccione el tipo</label>
             <select class="form-control" name="tipo" id="tipo" required>
                 <option value="admin" {{ old('tipo') == 'admin' ? 'selected' : '' }}>Admin</option>
                 <option value="empleado" {{ old('tipo') == 'empleado' ? 'selected' : '' }}>Empleado</option>
@@ -92,42 +92,42 @@
     <hr>
     <div class="row mb-3">
         <div class="col">
-            <label for="provincia">Provincia</label>
+            <label for="provincia" class="form-label">Provincia</label>
             <input type="text" class="form-control" name="provincia" value="{{ old('provincia') }}"
                 id="provincia" placeholder="provincia" onkeypress="validacionLetras(event)" required autocomplete="off">
         </div>
         <div class="col">
-            <label for="corregimiento">Corregimiento</label>
+            <label for="corregimiento" class="form-label">Corregimiento</label>
             <input type="text" class="form-control" name="corregimiento" value="{{ old('corregimiento') }}"
                 id="corregimiento" placeholder="corregimiento" onkeypress="validacionLetras(event)" required autocomplete="off">
         </div>
         <div class="col">
-            <label for="distrito">Distrito:</label>
+            <label for="distrito" class="form-label">Distrito:</label>
             <input type="text" class="form-control" name="distrito" value="{{ old('distrito') }}"
                 id="distrito" placeholder="distrito" required autocomplete="off"> 
         </div>
     </div>
     <div class="row mb-3">
         <div class="col">
-            <label for="ciudad">Ciudad</label>
+            <label for="ciudad" class="form-label">Ciudad</label>
             <input type="text" class="form-control" name="ciudad" value="{{ old('ciudad') }}"
                 id="ciudad" placeholder="ciudad" onkeypress="validacionLetras(event)" required autocomplete="off">
         </div>
 
         <div class="col">
-            <label for="codigo_postal">Código Postal</label>
+            <label for="codigo_postal" class="form-label">Código Postal</label>
             <input type="text" class="form-control" name="codigo_postal" value="{{ old('codigo_postal') }}"
                 id="codigo_postal" placeholder="código postal" required autocomplete="off">
         </div>
         <div class="col">
-            <label for="numero_casa">Número de Casa</label>
+            <label for="numero_casa" class="form-label">Número de Casa</label>
             <input type="text" class="form-control" name ="numero_casa" value="{{ old('numero_casa') }}"
                 id="numero_casa" placeholder="número de casa" required autocomplete="off">
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col form-group">
-            <label for="descripcion">Descripción</label>
+        <div class="col form-group" >
+            <label for="descripcion" class="form-label">Descripción</label>
             <textarea class="form-control" name="descripcion"
                 id="descripcion" placeholder="descripción"  autocomplete="off" rows="3">{{ old('descripcion') }}</textarea>
         </div>
@@ -206,11 +206,11 @@
         <div class="col-md-6">
             <label for="password">Contraseña</label>
             <div class="row ">
-                <div class="col">
+                <div class="col-md-10">
                     <input type="password" class="form-control" name="password" value="{{ old('password') }}" id="password" placeholder="contraseña" required>
                 </div>
-                <div>
-                    <button type="button" class="btn view-password" onclick="activarPasword(event)">ver</button>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary view-password" onclick="activarPasword(event)">ver</button>
                 </div>
             </div>
         </div>

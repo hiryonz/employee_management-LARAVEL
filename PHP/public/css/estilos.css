@@ -1,7 +1,7 @@
 html, body {
     height: 100%;
     width: 100%;
-    min-width: 500px;
+    min-width: 700px;
     margin: 0;
     padding: 0;
     display: flex;
@@ -65,12 +65,19 @@ p {
 
 
 
+.calendar-container {
+    width: 900px;
+    height: 700px;
+    padding: 20px;
+}
+
 .parent-container {
     display: flex;
     flex: 1;
     justify-content: center;
     align-items: center;
     background-color: #f3f2f2;
+    width: 100%;
 }
 
 .parent-container-viewEmployeeData .btn-light {
@@ -191,10 +198,12 @@ footer {
 }
 
 
-.parent-container .container-employee-time-graph {
+.parent-container .container-employee-time-graph,
+.parent-container .container-employee-task-graph {
     min-width: 400px;
     max-width: none;
     height: fit-content;
+    justify-content: center;
 }
 
 /* Estilo para el botón deshabilitado */
@@ -361,7 +370,7 @@ footer {
 
 
 .tables {
-    display: flex;
+    /*display: flex;*/
     align-items: center;
     width: 100%;
     height: 100%;
@@ -369,7 +378,7 @@ footer {
     background-color: #f0f0f0;
     max-height: 470px;
 }
-table {
+.table {
     display: block;
     overflow: auto;
     width: 100%;
@@ -381,28 +390,35 @@ table {
 } 
 
 
-table td {
+.table td {
     overflow: hidden; 
     width: 33%;
 }
 
 
 .tables::-webkit-scrollbar,
-table::-webkit-scrollbar{
+table::-webkit-scrollbar,
+.drop-zone::-webkit-scrollbar{
     width: 9px;
     height: 6px; 
-    background-color: #f0f0f0; 
+    background-color: #cbc9c9; 
+    border-radius: 10px;
+
  }
 
+
 .tables::-webkit-scrollbar-thumb,
-table::-webkit-scrollbar-thumb{
+table::-webkit-scrollbar-thumb,
+.drop-zone::-webkit-scrollbar-thumb{
     border-radius: 10px;
-    background-color: #d7cfcf;
+    background-color: #b9b4b4;
 }
 .tables::-webkit-scrollbar-thumb:active,
-table::-webkit-scrollbar-thumb:active {
-    background-color: #cec9c9; 
+table::-webkit-scrollbar-thumb:active,
+.drop-zone::-webkit-scrollbar-thumb:active {
+    background-color: #a9a4a4; 
 }
+
 
 
 
@@ -424,29 +440,6 @@ table::-webkit-scrollbar-thumb:active {
     align-items: center;
 }
 
-/* 
-*
-*estilos de task manager
-*
-*/
-
-.parent-container-task {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    grid-template-areas: 'sidebar content2';
-    width: 100%;
-    height: 100%;
-}
-
-.sidebar-container-task {
-    grid-area: sidebar;
-    background-color: #1c2331;
-}
-
-.content-container-task {
-    grid-area: content2;
-    background-color: aqua;
-}
 
 
 
@@ -460,13 +453,12 @@ table::-webkit-scrollbar-thumb:active {
 .parent-container-viewEmployeeData {
     display: grid;
     grid-template-columns: 1fr 0.7fr;
-    grid-template-rows: auto auto 0.5fr;
+    grid-template-rows: auto auto;
     width: 98%;
     height: 100%;
     grid-template-areas: 
                         'main-data graph-data'
-                        'main-data graph-data'
-                        'task-data task-data';
+                        'main-data graph-data';
 }
 
 
@@ -562,11 +554,6 @@ hr {
 }
 
 
-.task-data {
-    grid-area: task-data;
-    background-color: aquamarine;
-}
-
 
 
 .task-container-data,
@@ -634,7 +621,7 @@ hr {
     height: 100%;
 }
 
-#myChart {
+.myChart {
     width: 100% !important;
     height: 100% !important;
 }
@@ -721,6 +708,7 @@ hr {
     width: calc(100% + 10px);
     height: fit-content;
     max-height: 300px;
+    overflow: auto  ;
     border-radius: 5px;
     padding: 12px;
     background-color: #e1e7e8f7;
@@ -876,17 +864,458 @@ hr {
 }
 
 
+
+/*
+*
+*
+*task section
+*
+*/
+
+
+.parent-container-task {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px 1fr;
+    grid-template-areas: 'controller'
+                         'content-task';
+    justify-content: center;
+    height: 100%;                     
+    width: 100%;
+}
+
+.parent-content-container-task {
+    display: flex;
+    grid-area: content-task;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 20px;
+    padding: 10px;
+}
+.controller-container-task {
+    display: flex;
+    width: 100%;
+    grid-area: controller;
+    justify-content: center;
+}
+
+.opcion-sidebar-task {
+    background-color: #bbbdc0;
+}
+
+.content-container-task {
+    width: 100%;
+    max-height: 780px;
+    min-width: 10%;
+    max-width: 18%;
+
+
+}
+
+
+.content-task {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+}
+/*dropzones and draggables*/
+#drop-zone-new,
+#drop-zone-asign,
+#drop-zone-working,
+#drop-zone-review, 
+#drop-zone-done {
+    display: flex;
+    background-color: #ebecee;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border-radius: 5px;
+    
+}
+/*
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+* super duper importante!!!!!!!!!!!!!
+*
+* grid-auto-rows: min-content;
+*
+*para que se comporte como display block en display grid, define que el grid no sea el 100% del div (espacio disponible)
+*
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*####################################################################################################################################################
+*/
+.drop-zone {
+    display: grid;
+    grid-auto-rows: min-content;
+    user-select: none;
+    width: 100%;
+    min-width: 200px;
+    height: 74svh;
+    overflow: auto;
+    padding: 10px;
+    margin: 5px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+#drop-zone-new {
+    background-color: #cbc9c9;
+
+}
+
+.card-task {
+    display: block;
+    height: 120px;
+    width: 100% !important;
+    margin-top: 10px;
+    border-style: none;
+    border-radius: 5px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: grab;
+    background-color: #c9cacb;
+    box-shadow: 5px 5px 5px #a0a0a1cf;
+    text-align: start !important;
+}
+
+.card-task.original {
+    display: none;
+}
+
+.card-task.dragging {
+    opacity: 0.3;
+}
+
+.card-task:hover {
+    background-color: #c4c5c7;
+    transform: translateY(-1px); /* Levantar hacia arriba */
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3); /* Sombra más grande */
+}
+
+.card-task.dragging {
+    cursor: grabbing;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.drop-zone {
+    transition: background-color 0.2s, border 0.2s;
+}
+
+.drop-zone.highlight {
+    border: 2px dashed #74b4f8;
+    background-color: #d5dadf;
+}
+
+.add-card {
+    background-color: #cfd1d7b6;
+    border: 4px dashed #eaecf2ee !important;
+    color: #79797b;
+    opacity: 0.7;
+    transition: all 0.2s ease-in-out ;
+}
+.add-card:hover {
+    border: 3px dashed #d4d2d2 !important;
+
+}
+
+.placeholder {
+    height: 40px; 
+    width: 100%;
+    background-color: rgba(150, 97, 97, 0.258) !important; 
+    border: 2px dashed #ccc; 
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.hr-task {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.297);
+}
+
+
+
+
+/*
+*
+*
+*btn animation online
+*
+*/
+/*** ESTILOS BOTÓN GROW SKEW REVERSE ***/
+.ov-btn-grow-skew-reverse {
+    background: #d5dadf; /* color de fondo */
+    color: #6a6a6b; /* color de fuente */
+    border: 2px solid #c9cacb; /* tamaño y color de borde */
+    padding: 1px 20px;
+    border-radius: 3px; /* redondear bordes */
+    position: relative; 
+    z-index: 1;
+    overflow: hidden;
+    display: inline-block;
+    height: 30px;
+    margin-left: 5px;
+    text-decoration: none !important;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 2px 2px 5px #a0a0a1cf;
+  }
+
+  .ov-btn-grow-skew-reverse:hover {
+    color: #fff;/* color de fuente hover */
+    transform: translateY(-0.5px); /* Levantar hacia arriba */
+    box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.3);
+  }
+  .ov-btn-grow-skew-reverse::after {
+    content: "";
+    background: #2a2773c7; /* color de fondo hover */
+    position: absolute;
+    z-index: -1;
+    padding: 16px 20px;
+    display: block;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(45deg) scale(0, 1);
+    transition: all 0.3s ease;
+  }
+  .ov-btn-grow-skew-reverse:hover::after {
+    transition: all 0.3s ease-out;
+    transform: skewX(45deg) scale(1, 1);
+  }
+
+
+
+  /*
+  *
+  *
+  *task modal
+  *
+  */
+  /* Etiquetas */
+.modal-label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+/* Texto estático */
+.modal-static-text {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: normal;
+    color: #555;
+    margin-left: 10px;
+}
+
+/* Input y Select */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Fila */
+.form-group.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+/* Columna */
+.col-6 {
+    flex: 0 0 48%; /* Asegura que ambas columnas ocupen el 48% */
+}
+
+/* Hover para inputs editables */
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+/* Botón de acción */
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+
+#task-description {
+    height: auto;
+    min-height: 100px;
+    max-height: 500px;
+}
+
+.task-status {
+    width: fit-content;
+    padding: 7px 10px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 3px rgba(100, 102, 104, 0.664);
+}
+
+.nuevo {
+    background-color: #e3cf5a;
+    color: #000000;
+}
+
+.asignado {
+    background-color: #bad9e4;
+    color: #000000;
+}
+
+.trabajando {
+    background-color: #FFA07A;
+    color: #000000;
+}
+
+.revisar {
+    background-color: #fa4120;
+    color: #ffffff;
+}
+
+.listo {
+    background-color: #32CD32;
+    color: #ffffff;
+}
+
+.card-task.nuevo {
+    background-color: #d6d7b6; /* Verde oliva suave */
+    color: #3c3c3c;
+}
+
+.card-task.asignado {
+    background-color: #c9d6e3; /* Azul cielo grisáceo */
+    color: #3c3c3c;
+}
+
+.card-task.trabajando {
+    background-color: #e3c9c9; /* Rosa grisáceo */
+    color: #3c3c3c;
+}
+
+.card-task.revisar {
+    background-color: #cb8e8e; /* Rojo terracota grisáceo */
+    color: #3c3c3c;
+}
+
+.card-task.listo {
+    background-color: #a0dbc3; /* Verde menta suave */
+    color: #3c3c3c;
+}
+
+
+/*
+*
+*add task check box 
+*
+*/
+.checkbox-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.checkbox-item:hover {
+    transform: scale(1.02); /* Efecto de zoom suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.checkbox-item .asignedEmployee {
+    width: 40px !important;
+    height: 40px;
+    border-radius: 50px;
+    border: 1px solid #a7a7a7;
+}
+.checkbox-item label {
+    flex-grow: 1;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.checkbox-item .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    margin-left: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.checkbox-item .delete-btn:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px); /* Efecto de "botón presionado" */
+}
+
+.checkbox-item .delete-btn:active {
+    background-color: #a93226;
+    transform: translateY(0);
+}
+
+
+/*
+****************************************************
+* para que si no eres admin no te permita borrar el empleado asignado
+****************************************************
+*/
+.checkbox-group.disabled button{
+    display: none;
+}
+
+
+.container-error {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050; /* Asegura que se muestre sobre otros elementos */
+}
+
+
+
 @media ( width < 992px ) {
      .big-logo {
         display: none;
     }
     
-    .parent-container-task {
-        grid-template-rows: 120px 1fr;
-        grid-template-areas: 'sidebar sidebar'
-                             'content2  content2';
-    }
-
     .employee-profile-container {
         display: block !important;
     }
@@ -926,8 +1355,7 @@ hr {
         grid-template-columns: 1fr;
         grid-template-areas: 
                             'main-data '
-                            'graph-data'
-                            'task-data ';
+                            'graph-data';
     }
 
     .graph-data {
@@ -958,4 +1386,22 @@ hr {
        display: none;
    }
 }
+
+
+@keyframes shrinkAndRestore {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.95); /* Ajusta este valor para controlar cuánto se encoge */
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Clase que activa la animación */
+  .dropzone-animate {
+    animation: shrinkAndRestore 0.3s ease-in-out;
+  }
 

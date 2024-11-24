@@ -4,8 +4,7 @@
 
 
 <div class="change-password-container">
-    <x-error-management/>
-
+    
     <form class="change-password-form" action="{{route('change.password')}}" method="post">
         @csrf
         <div class="change-password-title-container">

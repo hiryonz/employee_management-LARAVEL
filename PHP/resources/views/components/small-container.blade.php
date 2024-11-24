@@ -1,4 +1,4 @@
-@props(['name', 'info', 'logo', 'first', 'second', 'third', 'fourth', 'class', 'path'])
+@props(['name', 'info', 'logo', 'first', 'second', 'third', 'class', 'path'])
 
 
 <div class="general-info  {{$class}}">
@@ -9,15 +9,13 @@
         <div class="small-value">
             @switch($info)
                 @case('1')
+                    <!-- first type of container -->
                     <p>{{ $first }}{{ isset($second) ? "/$second" : '' }}</p>
                 @break
 
                 @case('2')
+                    <!-- second type of container -->
                     <p>{{$third}}</p>
-                    @break
-
-                @case('3')
-                    <p>{{$fourth}}</p>
                     @break
 
                 @default

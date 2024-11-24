@@ -28,7 +28,13 @@
         @if (is_array($combinedData) && count($combinedData) > 0)
             @foreach ($combinedData as $row)
             
-                <tr class="tables-row" @if (!isset($path)) onclick="findEmployee({{$row['cedula'] ?? ''}})" 
+                <tr class="tables-row" 
+                @if (!isset($path))
+                    @if ($name == 'employee')
+                        onclick="findEmployee({{$row['cedula'] ?? ''}})" 
+                    @elseif ($name == 'task')
+                        onclick="window.location.href = '{{ url('task') }}'"
+                    @endif
                 @endif 
                 >
                     @foreach ($row as $data)

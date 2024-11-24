@@ -24,15 +24,15 @@
         @if (auth()->check() && auth()->user()->employee->tipo === "admin")
 
             <div class="d-flex">
-                <form style="width: 100px" action="{{ route('destroyEmployee.post', ['id' => $employeeData->cedula]) }}"
+                <form class="ms-2 me-2" style="width: 100px" action="{{ route('destroyEmployee.post', ['id' => $employeeData->cedula]) }}"
                     onsubmit="return confirm('¿Seguro que deseas eliminar al empleado con cédula {{ $employeeData->cedula }}?')"
                     method="POST">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger ml-2 mr-4">Eliminar</button>
+                    <button class="btn btn-danger">Eliminar</button>
                 </form>
-                <button type="button" class="btn btn-light mr-4" data-toggle="modal" data-target="#Actualizar">Actualizar</button>
-                <button class="btn btn-light mr-4" data-toggle="modal" data-target="#historial">Ver Historial</button>
+                <button type="button" class="btn btn-light me-4" data-bs-toggle="modal" data-bs-target="#Actualizar">Actualizar</button>
+                <button class="btn btn-light me-4" data-bs-toggle="modal" data-bs-target="#historial">Ver Historial</button>
             </div>
 
             
@@ -40,8 +40,7 @@
             @include('include.modals.modal-historialDescuento')
             
             @endif
-        <x-error-management/>
-        @include('include.modals.modal-actualizarImg')
+                @include('include.modals.modal-actualizarImg')
         <div id="data_principal">
             <x-employee-data-detailed 
                 name="principal"
@@ -64,13 +63,13 @@
 
         <div class="task-container-data">
             <div class="container-employee-task-graph">
-                <h2>4</h2>
+                @if (auth()->user()->employee->tipo === 'admin')
+                    <x-graph1 id="task" :labels="$labelsTask2" :data="$task2" />
+                @else
+                    <x-graph1 id="task" :labels="$labelsTask" :data="$task" />
+                @endif
             </div>
         </div>
-    </div>
-
-    <div class="task-data">
-        <p>1</p>
     </div>
 
 </div>
@@ -79,6 +78,7 @@
 
 <script>
     const inputs = document.querySelectorAll('.form-control');
+
 
     function asignSelect(form) {
         console.log(form)
@@ -94,23 +94,26 @@
     }
 
     function increaseInputLenght(event) {
+        console.log(event)
         const input = event.target;
         input.style.width = input.value.length + 7 + "ch";
+        console.log(input)
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const inputs = document.querySelectorAll('.submain-data input');
-        const inputs2 = document.querySelectorAll('.modal-body .submain-data input');
+        const inputs1 = document.querySelectorAll('.submain-data input, .submain-data select');
+ 
+        const inputs2 = document.querySelectorAll('.modal-body .submain-data input, .modal-body .submain-data select');
 
         const form = document.getElementById('data_principal');
         const formModal = document.querySelector('#Actualizar .modal-body');
 
-        inputs.forEach(input => {
-            increaseInputLenght({ target: input });
+        inputs1.forEach(input => {
+            input.addEventListener('input', increaseInputLenght);
         });
 
         inputs2.forEach(input => {
-            increaseInputLenght({ target: input });
+            input.addEventListener('input', increaseInputLenght);
         });
 
         if(form) asignSelect(form);
@@ -118,9 +121,7 @@
         initializePlanillaCalculators(document.querySelector('.parent-container-viewEmployeeData'));
     });
 
-    inputs.forEach(input => {
-        input.addEventListener('input', increaseInputLenght);
-    });
+
 
 
 

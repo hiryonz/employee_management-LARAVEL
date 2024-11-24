@@ -3,8 +3,7 @@
 @section('content')
     <div class="container">
 
-        <x-error-management/>
-
+        
         <?php $route = "registration.post" ?>
         <div class="formulario-container-employee">
             <x-employee-form-layout :route="$route"></x-employee-form-layout>
