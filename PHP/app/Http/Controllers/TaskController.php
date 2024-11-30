@@ -79,7 +79,7 @@ class TaskController extends Controller
             \Log::error('Error al eliminar la tarea: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());
 
-            return redirect()->back()->with(['message' => 'error al eliminar.' . $e->getMessage()]);
+            return redirect()->back()->with(['message' => 'error al agregar una tarea.' . $e->getMessage()]);
         }
     }
 
@@ -116,8 +116,7 @@ class TaskController extends Controller
 
     public function update(Request $request)
     {
-        //  dd($request->all());
-
+        //dd($request->all());
         try {
             // Validar los datos recibidos
             $request->validate([
@@ -131,7 +130,7 @@ class TaskController extends Controller
                 'forEmployee' => 'nullable|array',
                 'forEmployee.*' => 'string|exists:employee,cedula'
             ]);
-
+            
             // Encontrar la tarea por ID
             $task = Task::findOrFail($request->id);
             
@@ -143,14 +142,14 @@ class TaskController extends Controller
             $task->estado = $request->estado;
             $task->fecha_limite = $request->fecha_limite;
             $task->save();
-
-                    // Obtener los IDs de los empleados actualmente asignados
+            
+            // Obtener los IDs de los empleados actualmente asignados
             $currentEmployeeIds = InchargeTask::where('id_incharge', $task->id)->pluck('cedula')->toArray();
-
+            
             // Obtener las cédulas de los empleados desde la solicitud y convertirlas a IDs
             $requestedEmployeeCedulas = $request->input('forEmployee', []);
             $requestedEmployeeIds = Employee::whereIn('cedula', $requestedEmployeeCedulas)->pluck('cedula')->toArray();
-
+            
             // Crear arrays asociativos para facilitar la verificación
             $currentEmployeeIdsAssoc = array_flip($currentEmployeeIds);
             $requestedEmployeeIdsAssoc = array_flip($requestedEmployeeIds);
@@ -185,12 +184,10 @@ class TaskController extends Controller
             ]);
         } catch (\Exception $e) {
             // Manejar errores
-            \Log::error('Error en updateTask: ' . $e->getMessage());
-    
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
+                'message' => 'error al actualizar.' . $e->getMessage(),
+            ]);
         }
     }
 
@@ -211,7 +208,7 @@ class TaskController extends Controller
             $task->delete();
 
             // Responder con éxito
-            return redirect()->back()->with(['message' => 'Tarea eliminada correctamente.']);
+            return redirect()->back()->with(['success' => 'Tarea eliminada correctamente.']);
         } catch (\Exception $e) {
             // Manejar errores
             \Log::error('Error al eliminar la tarea: ' . $e->getMessage());

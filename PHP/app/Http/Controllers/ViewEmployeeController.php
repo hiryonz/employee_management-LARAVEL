@@ -82,6 +82,6 @@ class ViewEmployeeController extends Controller
         }
         //dd($descuentoFalta);
 
-        return view("viewEmployee", compact("employee", ));
+        return view("viewEmployee", compact("employee" ));
     }
 }

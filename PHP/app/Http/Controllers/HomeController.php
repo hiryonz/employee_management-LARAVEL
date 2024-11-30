@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
 
@@ -27,16 +27,16 @@ class HomeController extends Controller
         $user = Auth::user();
         
         if($user->employee->tipo === 'admin') {
-            return $this -> getAdminData();
+            return $this -> getAdminData($request);
         }else {
-            return $this -> getEmployeeData($user->employee->cedula);
+            return $this -> getEmployeeData($user->employee->cedula, $request);
         }
         
         
     }
     
     
-    public function getAdminData() {
+    public function getAdminData($request) {
         /*
         *
         *   MUY IMPORTANTE EL toArray()
@@ -95,7 +95,8 @@ class HomeController extends Controller
 
 
         $totalPersonal =   count($employee);
-        $countPersonal = EntradaSalida::whereNotNull('hora_entrada')->where('fecha', $fechaActual)->count();
+        $countPersonal = EntradaSalida::whereNotNull('hora_entrada')
+        ->whereNull('hora_salida')->where('fecha', $fechaActual)->count();
 
         $labelsTask = ['nuevo', 'asignado', 'trabajando', 'revisar'];
 
@@ -114,13 +115,26 @@ class HomeController extends Controller
         ->where('estado', 'revisar')->count(); 
         //labels
 
+        $today = Carbon::today()->toDateString(); // Obtener la fecha de hoy en formato "YYYY-MM-DD"
+        $pendingTasks = array_filter($task, function ($task) use ($today) {
+            return $task['fecha_limite'] === $today;
+        });
 
+        $pendingTasks = array_values($pendingTasks);
+
+            // Verificar si el modal ya fue mostrado
+        $showModal = !$request->session()->has('modal_shown') && !empty($pendingTasks);
+
+        // Marcar el modal como mostrado
+        if ($showModal) {
+            $request->session()->put('modal_shown', true);
+        }
         return view('home', compact('employee', 'task', 'totalPersonal', 
         'countPersonal', "labels", 'dataDescuento', 'totalHorasFaltas',
-        'reviewTask', 'taskCount', 'allTask', 'labelsTask')) ;
+        'reviewTask', 'taskCount', 'allTask', 'labelsTask', 'pendingTasks', 'showModal')) ;
     }
 
-    public function getEmployeeData($id) {
+    public function getEmployeeData($id, $request) {
         $year = date("Y");
         $month = date("m");
         $descuentoFaltas = DescuentoFalta::select(DB::raw('SUM(horas_faltas) as total_horas_faltas, SUM(descuentos_faltas) as total_descuento'))
@@ -160,8 +174,25 @@ class HomeController extends Controller
         ])->get()->toArray();
         //dd($report, $news);
         
+
+        $task2 = Task::select('id', 'cedula', 'departamento', 'prioridad', 'estado', 'fecha_limite')
+        ->where('cedula', auth()->user()->employee->cedula)->get()->toArray() ?? []; 
+        $today = Carbon::today()->toDateString(); // Obtener la fecha de hoy en formato "YYYY-MM-DD"
+        $pendingTasks = array_filter($task2, function ($task2) use ($today) {
+            return $task2['fecha_limite'] === $today;
+        });
+        $pendingTasks = array_values($pendingTasks);
+
+
+            // Verificar si el modal ya fue mostrado
+        $showModal = !$request->session()->has('modal_shown') && !empty($pendingTasks);
+
+        // Marcar el modal como mostrado
+        if ($showModal) {
+            $request->session()->put('modal_shown', true);
+        }
         return view('homeEmployee', compact('mesFalta', 'semanaFalta', 'descuentoFaltas',
-        'asignTask', 'task', 'workingTask'));
+        'asignTask', 'task', 'workingTask', 'pendingTasks', 'showModal'));
 
     }
 

@@ -50,11 +50,13 @@
     </div>
 
     <div class="container-employee-time-graph">
+    <h5 class="h5-title">Tus faltas</h5>
         <x-graph2 id="detailed_data" :mesFalta="$mesFalta" :semanaFalta="$semanaFalta"></x-graph2>
     </div>
     
     <div class="container-employee-task scrollContainer" >
         <div class="tables">
+        <h5 class="h5-title">Tus tareas pendientes</h5>
             <x-tables-layout name="task" :task="$task"></x-tables-layout>
         </div>
     </div>

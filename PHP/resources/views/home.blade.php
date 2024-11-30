@@ -7,6 +7,7 @@
     $anuncios = "hola";
 ?>
 
+@include('include.modals.modal-advert')
 
 <div class="parent-container-home">
 
@@ -46,16 +47,19 @@
     
     <div class="container-employee-time scrollContainer" >
         <div class="tables">
+            <h5 class="h5-title">Datos de empleados</h5>
             <x-tables-layout name="employee" :employee="$employee"></x-tables-layout>
         </div>
     </div>
 
     <div class="container-employee-time-graph">
+        <h5 class="h5-title">faltas de los empleados</h5>
         <x-graph1 id="time" :labels="$labels" :data="$dataDescuento" />
     </div>
     
     <div class="container-employee-task scrollContainer" >
         <div class="tables">
+            <h5 class="h5-title">Tareas pendientes</h5>
             <x-tables-layout name="task" :task="$task"></x-tables-layout>
         </div>
     </div>
@@ -63,6 +67,7 @@
 
 ?>
     <div class="container-employee-task-graph">
+    <h5 class="h5-title">Tareas pendientes</h5>
         <x-graph1 id="task" :labels="$labelsTask" :data="$allTask" />
     </div>
 </div>

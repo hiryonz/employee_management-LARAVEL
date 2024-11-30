@@ -167,36 +167,52 @@ function asignarFecha() {
     console.log(formattedNow);
 }
 
-
+let activeFilters = {
+    departamento: 'all',
+    fecha: 'all',
+    prioridad: 'all',
+};
 // Función para aplicar el filtro
-function filterTasks(filterType, filterValue) {
+function filterTasks(filterType, filterValue, dateFilterType = 'fecha_creacion') {
+    console.log(filterType, filterValue);
+    console.log("Filtro de fecha basado en:", dateFilterType);
+
+    // Actualizar el filtro activo
+    activeFilters[filterType] = filterValue;
+
     const tasks = document.querySelectorAll('.card-task:not(.add-card)');
+    const tasksData = @json($dataTask); // Datos de tareas desde el backend
+
     tasks.forEach(task => {
-        let taskValue = '';
-        // Obtener el valor del campo según el tipo de filtro
-        if (filterType === 'departamento') {
-            taskValue = task.querySelector('.card-task-description').textContent.toLowerCase();
-        } else if (filterType === 'prioridad') {
-            taskValue = task.querySelector('.card-task-relevance').textContent.toLowerCase();
-        } else if (filterType === 'fecha') {
-            const tasksData = @json($dataTask);
-            const taskData = tasksData.find(t => t.id == task.getAttribute('id'));
+        const taskId = task.getAttribute('id');
+        const taskData = tasksData.find(t => t.id == taskId);
 
-            if (taskData) {
-                taskValue = taskData.fecha_creacion; // Usa la fecha del backend
-            } else {
-                taskValue = '';
+        let matches = true;
+
+        // Verificar cada filtro
+        if (activeFilters.departamento !== 'all') {
+            const taskDepartamento = task.querySelector('.card-task-description').textContent.toLowerCase();
+            if (!taskDepartamento.includes(activeFilters.departamento)) {
+                matches = false;
             }
-            console.log(`Comparando: taskValue=${taskValue}, filterValue=${filterValue}`);
         }
 
-
-        // Mostrar u ocultar la tarea según el filtro
-        if (filterValue === 'all' || taskValue.includes(filterValue)) {
-            task.style.display = 'block';
-        } else {
-            task.style.display = 'none';
+        if (activeFilters.fecha !== 'all' && taskData) {
+            const taskFecha = taskData[dateFilterType]; // Usa el tipo de fecha especificado
+            if (taskFecha !== activeFilters.fecha) {
+                matches = false;
+            }
         }
+
+        if (activeFilters.prioridad !== 'all') {
+            const taskPrioridad = task.querySelector('.card-task-relevance').textContent.toLowerCase();
+            if (!taskPrioridad.includes(activeFilters.prioridad)) {
+                matches = false;
+            }
+        }
+
+        // Mostrar u ocultar la tarea según si cumple todos los filtros
+        task.style.display = matches ? 'block' : 'none';
     });
 }
 
@@ -216,19 +232,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
      // Filtrar por Departamento
      document.getElementById('apply-filter-departamento').addEventListener('click', () => {
-        const filterValue = document.getElementById('filter-departamento-input').value.toLowerCase();
-        filterTasks('departamento', filterValue);
+    const filterValue = document.getElementById('filter-departamento-input').value.toLowerCase();
+    filterTasks('departamento', filterValue);
     });
 
-    // Filtrar por Fecha (puedes ajustar según tus datos)
     document.getElementById('apply-filter-fecha').addEventListener('click', () => {
         const filterValue = document.getElementById('filter-fecha-input').value;
-        console.log(filterValue)
-
         filterTasks('fecha', filterValue);
     });
 
-    // Filtrar por Prioridad
     document.getElementById('apply-filter-prioridad').addEventListener('click', () => {
         const filterValue = document.getElementById('filter-prioridad-input').value.toLowerCase();
         filterTasks('prioridad', filterValue);
@@ -239,6 +251,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const filters = {
+        departamento: '{{ session('departamento', 'all') }}',
+        fecha: '{{ session('fecha', 'all') }}',
+        prioridad: '{{ session('prioridad', 'all') }}',
+    };
+
+    // Aplicar los filtros iniciales
+    for (const [filterType, filterValue] of Object.entries(filters)) {
+        filterTasks(filterType, filterValue);
+    }
+});
+
 
 // Función para mover tareas a las zonas de caída
 function asignarTareasAZonas() {
@@ -410,7 +436,7 @@ function updateTask(taskId, event) {
     }
     })
     .catch(error => {
-        console.error('Error al actualizar la tarea:', error);
+        console.error('Error al actualizar la tarea:', error.message);
     });
 }
 
