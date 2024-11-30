@@ -223,7 +223,7 @@ footer {
 .container-employee-task,
 .container-employee-task-graph,
 .container-employee-data {
-    background-color: #f0f0f0; 
+    background-color: #ffffff; 
     border: 1px solid #ccc;    
     padding: 20px;             
     border-radius: 5px;   
@@ -261,7 +261,7 @@ footer {
 }
 
 .general-info {
-    background-color: #f0f0f0; 
+    background-color: #ffffff; 
     border: 1px solid #ccc; 
     border-radius: 5px;   
     margin: 10px;
@@ -296,9 +296,8 @@ footer {
     margin-bottom: 20px;
 }
 
-.container-employee-time:hover,
+
 .container-employee-time-graph:hover,
-.container-employee-task:hover,
 .container-employee-task-graph:hover,
 .general-info:hover {
     background-color: rgba(245, 239, 239, 0.95)
@@ -325,17 +324,15 @@ footer {
 
 
 .container-employee-task {
-    display: grid !important;
     grid-area: task !important;
 }
 
 .container-employee-task-graph {
-    display: grid !important;
     grid-area: task-graph !important;
 }
 
 .navbar-user {
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     width: 45px;
     height: 45px;
     display: flex ;
@@ -374,8 +371,7 @@ footer {
     align-items: center;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     max-height: 470px;
 }
 .table {
@@ -398,7 +394,8 @@ footer {
 
 .tables::-webkit-scrollbar,
 table::-webkit-scrollbar,
-.drop-zone::-webkit-scrollbar{
+.drop-zone::-webkit-scrollbar,
+body::-webkit-scrollbar{
     width: 9px;
     height: 6px; 
     background-color: #cbc9c9; 
@@ -409,13 +406,15 @@ table::-webkit-scrollbar,
 
 .tables::-webkit-scrollbar-thumb,
 table::-webkit-scrollbar-thumb,
-.drop-zone::-webkit-scrollbar-thumb{
+.drop-zone::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb{
     border-radius: 10px;
     background-color: #b9b4b4;
 }
 .tables::-webkit-scrollbar-thumb:active,
 table::-webkit-scrollbar-thumb:active,
-.drop-zone::-webkit-scrollbar-thumb:active {
+.drop-zone::-webkit-scrollbar-thumb:active,
+body::-webkit-scrollbar-thumb:active {
     background-color: #a9a4a4; 
 }
 
@@ -429,6 +428,10 @@ table::-webkit-scrollbar-thumb:active,
     overflow: auto;
     padding-right: 0;
     padding-bottom: 0;
+}
+
+.h5-title {
+    text-align: center;
 }
 
 .parent-container-viewEmployee {
@@ -605,6 +608,12 @@ hr {
 .graph-data .container-employee-time-graph {
     height: fit-content;  
     width: 100%;
+}
+.container-employee-task-graph {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .graph2-container {
@@ -1403,5 +1412,34 @@ hr {
   /* Clase que activa la animación */
   .dropzone-animate {
     animation: shrinkAndRestore 0.3s ease-in-out;
+  }
+
+  .login-container {
+    width: fit-content;
+    min-height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 20px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.174);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 45px;
+  }
+
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .login-container form h1 {
+    text-align: center;
+  }
+
+  .parent-container-task .controller-container-task,
+  .parent-container-task .parent-content-container-task {
+        width: 95%;
   }
 

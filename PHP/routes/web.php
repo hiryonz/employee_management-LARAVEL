@@ -8,6 +8,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SaveFilter;
+use App\Http\Controllers\SaveFilterController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
@@ -58,6 +60,7 @@ Route::middleware([ValidadeAuth::class])->group(function() {
         Route::post('/task/updateState', [TaskController::class, 'updateState'])->name('updateTaskState');
         Route::post('/tasks/destroy', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
+        Route::post('/guardar-filtro', [SaveFilterController::class, 'saveFilter'])->name('guardar.filtro');
 
     });
 

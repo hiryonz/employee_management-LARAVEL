@@ -48,8 +48,8 @@
 
     </div>
     <a class="navbar-user big-logo"  id="userIcon">
-      @if ($employeeData->profile_image ?? '' && File::exists(public_path($employeeData->profile_image ?? '')))
-          <img class="card-img-top img" src="{{ asset($employeeData->profile_image) }}" alt="Card image cap" class="profile-image img">
+      @if (auth()->user()->employee->profile_image ?? '' && File::exists(public_path(auth()->user()->employee->profile_image ?? '')))
+          <img class="card-img-top img" src="{{ asset(auth()->user()->employee->profile_image) }}" alt="Card image cap" class="profile-image img">
           @else
           <i class="fa-solid fa-user"></i>    
       @endif

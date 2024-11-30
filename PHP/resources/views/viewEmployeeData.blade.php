@@ -40,7 +40,8 @@
             @include('include.modals.modal-historialDescuento')
             
             @endif
-                @include('include.modals.modal-actualizarImg')
+            
+            @include('include.modals.modal-actualizarImg')
         <div id="data_principal">
             <x-employee-data-detailed 
                 name="principal"
@@ -57,12 +58,14 @@
     <div class="graph-data">
         <div class="time-container-data">
             <div class="container-employee-time-graph">
+            <h5 class="h5-title">Faltas</h5>
                 <x-graph2 id="detailed_data" :mesFalta="$mesFalta" :semanaFalta="$semanaFalta"></x-graph2>
             </div>
         </div>
 
         <div class="task-container-data">
             <div class="container-employee-task-graph">
+                <h5 class="h5-title">Tareas pendientes</h5>
                 @if (auth()->user()->employee->tipo === 'admin')
                     <x-graph1 id="task" :labels="$labelsTask2" :data="$task2" />
                 @else
