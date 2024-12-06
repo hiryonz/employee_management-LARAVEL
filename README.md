@@ -144,6 +144,21 @@ Sigue estos pasos para instalar y configurar la aplicación:
    ```bash
    composer install
 
+> [!IMPORTANT]
+> - Si te da algun error de compatibilidad siga las recomendaciones
+>  ```bash
+>  composer update
+>  ```
+>&nbsp;
+> 
+>  - Es muy importante que actives el gd de php.ini
+>  - Habilitar la extensión GD en PHP:
+>     - Abre el archivo php.ini ubicado en C:\xampp\php\php.ini.
+>     - Busca la línea que contiene ;extension=gd.
+>     - Quita el punto y coma (;) al inicio de la línea para habilitar la extensión:
+>       ```bash
+>       extension=gd
+>       ```
 
 5. Copia el archivo .env.example como .env:
    ```bash
