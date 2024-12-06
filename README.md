@@ -304,7 +304,6 @@ Sigue estos pasos para instalar y configurar la aplicación:
 
 ---
 
-## de
 
 <br>
 
