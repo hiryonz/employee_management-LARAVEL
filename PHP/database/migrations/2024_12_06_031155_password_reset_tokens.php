@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('login_user', function (Blueprint $table) {
-            $table->foreign('cedula')->references('cedula')->on('employee')->onDelete('cascade');
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('user')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
-    
     }
 
     /**
@@ -22,8 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('login_user', function (Blueprint $table) {
-            $table->dropForeign(['cedula']);
-        });
+        Schema::dropIfExists('password_reset_tokens');
+
     }
 };

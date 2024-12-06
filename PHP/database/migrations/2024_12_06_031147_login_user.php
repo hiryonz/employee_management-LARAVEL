@@ -12,13 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('login_user', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('cedula')->unique();
             $table->string('user')->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('remember_token', 100)->nullable();
             $table->timestamps();
+
+            $table->foreign('cedula')->references('cedula')->on('employee')->onDelete('cascade');
         });
+
+        // Insert inicial
+        DB::table('login_user')->insert([
+            ['cedula' => '1', 'user' => 'admin', 'password' => bcrypt('admin'), 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 
     /**
@@ -27,5 +34,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('login_user');
+
     }
 };

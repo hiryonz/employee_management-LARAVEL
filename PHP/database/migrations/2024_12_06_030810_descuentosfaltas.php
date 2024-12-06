@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::table('planillas', function(Blueprint $table) {
-            $table->dropColumn('horas_faltas');
-            $table->dropColumn('descuentos_faltas');
-        });
-
-        Schema::create('descuentosFaltas', function (Blueprint $table) {
+        Schema::create('descuentosfaltas', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula')->constrained('employee')->onDelete('cascade');
+            $table->string('cedula');
             $table->date('fecha');
             $table->double('horas_faltas');
             $table->double('descuentos_faltas');
             $table->timestamps();
+            $table->double('horas_extras');
+            
+            $table->foreign('cedula')->references('cedula')->on('employee')->onDelete('cascade');
         });
     }
 
@@ -32,11 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('planillas', function(Blueprint $table) {
-            $table->double('horas_faltas');
-            $table->double('descuentos_falta');
-        });
+        Schema::dropIfExists('descuentosfaltas');
 
-        Schema::dropIfExists('descuentosFaltas');
     }
 };

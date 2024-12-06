@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('direcciones', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula')->constrained('employee')->onDelete('cascade');
+            $table->string('cedula');
             $table->string('ciudad');
             $table->string('codigo_postal');
             $table->string('provincia');
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('numero_casa');
             $table->text('descripcion');
             $table->timestamps();
+
+            $table->foreign('cedula')->references('cedula')->on('employee')->onDelete('cascade');
         });
     }
 
@@ -31,5 +33,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('direcciones');
+
     }
 };
