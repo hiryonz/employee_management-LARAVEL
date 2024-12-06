@@ -350,7 +350,6 @@ Sigue estos pasos para instalar y configurar la aplicación:
 
 ---
 
-https://github.com/hiryonz/employee_management-LARAVEL/blob/13ef3d35ac4976ada08e7b7fdfe99bb130461d13/img_readme/home.png
 ## Imagenes del Sistema
 ![agregar empleado](https://github.com/hiryonz/employee_management-LARAVEL/blob/13ef3d35ac4976ada08e7b7fdfe99bb130461d13/img_readme/agregar.png)
 
