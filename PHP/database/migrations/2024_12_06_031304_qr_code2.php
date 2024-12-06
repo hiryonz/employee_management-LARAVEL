@@ -9,20 +9,25 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('QR_code', function (Blueprint $table) {
+        Schema::create('qr_code', function (Blueprint $table) {
             $table->id();
             $table->string('cedula');
-            $table->foreign('cedula')->references('cedula')->on('employee')->onDelete('cascade');         
             $table->string('authcode');
-            $table->string('qr_code');
+            $table->longText('qr_code');
             $table->timestamps();
+
+            $table->foreign('cedula')->references('cedula')->on('employee')->onDelete('cascade');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('QR_code');
+        Schema::dropIfExists('qr_code');
+
     }
 };

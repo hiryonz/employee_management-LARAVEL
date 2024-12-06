@@ -168,13 +168,13 @@ footer {
 
 .parent-container-home {
     display: grid;
+    width: 90%;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 130px 1fr 1fr;
     grid-template-areas: "general_info general_info general_info general_info"
                          "time  time task task"
                          "time-graph time-graph task-graph task-graph";
     gap:50px;
-    margin: 10%;
     margin-top: 50px;
     margin-bottom: 50px;   
 }
